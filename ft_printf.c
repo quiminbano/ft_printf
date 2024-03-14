@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/14 17:12:56 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/14 21:59:27 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ static int	handle_variadic(const char *s, va_list *ar, int fd, t_printf *data)
 
 	count = &(data->count);
 	if (s[data->index] == 'd' || s[data->index] == 'i')
-		return (nbrbase_return(va_arg(*ar, int), fd, NORMAL, count));
+		return (nbr_return(va_arg(*ar, int), fd, NORMAL, count));
 	else if (s[data->index] == 'c')
 		return (char_return(va_arg(*ar, int), fd, count));
 	else if (s[data->index] == 'u')
-		return (nbrbase_return(va_arg(*ar, unsigned int), fd, NORMAL, count));
+		return (print_number(va_arg(*ar, unsigned int), fd, NORMAL, count));
 	else if (s[data->index] == 'x')
-		return (nbrbase_return(va_arg(*ar, unsigned int), fd, LOWER, count));
+		return (print_number(va_arg(*ar, unsigned int), fd, LOWER, count));
 	else if (s[data->index] == 'X')
-		return (nbrbase_return(va_arg(*ar, unsigned int), fd, UPPER, count));
+		return (print_number(va_arg(*ar, unsigned int), fd, UPPER, count));
 	else if (s[data->index] == 'p')
 		return (print_pointer(va_arg(*ar, unsigned long), fd, LOWER, count));
 	else if (s[data->index] == 's')
