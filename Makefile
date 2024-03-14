@@ -3,20 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: corellan <corellan@student.42.fr>          +#+  +:+       +#+         #
+#    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 13:33:33 by corellan          #+#    #+#              #
-#    Updated: 2022/11/21 16:10:28 by corellan         ###   ########.fr        #
+#    Updated: 2024/03/14 14:24:05 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
-SRC = ft_print_address.c ft_print_hex_u.c ft_print_hex.c ft_printf.c \
-ft_uitoa.c ft_writer.c
+SRC = ft_printf.c ft_printf_utils.c
 
-OUT = ft_print_address.o ft_print_hex_u.o ft_print_hex.o ft_printf.o \
-ft_uitoa.o ft_writer.o
+OUT = $(SRC:.c=.o)
 
 FLAGS = -Wall -Wextra -Werror
 

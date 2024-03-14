@@ -6,36 +6,87 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/13 17:13:39 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:12:56 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	handle_variadic(const char *s, va_list *args, size_t index)
+static int	handle_variadic(const char *s, va_list *ar, int fd, t_printf *data)
 {
-	if (s[index] == 'd' || s[index] == 'i')
-		return (putnbr_returnable(va_arg(*args, int), 1));
+	int	*count;
+
+	count = &(data->count);
+	if (s[data->index] == 'd' || s[data->index] == 'i')
+		return (nbrbase_return(va_arg(*ar, int), fd, NORMAL, count));
+	else if (s[data->index] == 'c')
+		return (char_return(va_arg(*ar, int), fd, count));
+	else if (s[data->index] == 'u')
+		return (nbrbase_return(va_arg(*ar, unsigned int), fd, NORMAL, count));
+	else if (s[data->index] == 'x')
+		return (nbrbase_return(va_arg(*ar, unsigned int), fd, LOWER, count));
+	else if (s[data->index] == 'X')
+		return (nbrbase_return(va_arg(*ar, unsigned int), fd, UPPER, count));
+	else if (s[data->index] == 'p')
+		return (print_pointer(va_arg(*ar, unsigned long), fd, LOWER, count));
+	else if (s[data->index] == 's')
+		return (str_return(va_arg(*ar, char *), fd, count));
+	else if (s[data->index] == '%')
+		return (char_return('%', fd, count));
+	return (0);
 }
 
-int	ft_printf(const char *s, ...)
+int	ft_dprintf(int fd, const char *s, ...)
 {
-	va_list		args;
+	va_list		ar;
 	t_printf	data;
 
 	ft_bzero(&data, sizeof(data));
-	va_start(args, s);
+	va_start(ar, s);
 	while (s[data.index])
 	{
 		if (s[data.index] == '%' && s[data.index + 1] != '\0')
 		{
 			(data.index)++;
-			data.return_status = handle_variadic(s, &args, data.index);
+			data.return_status = handle_variadic(s, &ar, fd, &data);
+			(data.count) -= 2;
 		}
-		else if (s[data.index] != '\0')
-			data.return_status = putchar_returnable(s[data.index], 1);
+		else if (s[data.index] != '%' && s[data.index] != '\0')
+			data.return_status = char_return(s[data.index], fd, &data.count);
+		if (data.return_status == -1)
+		{
+			va_end(ar);
+			return (-1);
+		}
 		(data.index)++;
 	}
-	va_end(args);
-	return (0);
+	va_end(ar);
+	return (data.count);
+}
+
+int	ft_printf(const char *s, ...)
+{
+	va_list		ar;
+	t_printf	data;
+
+	ft_bzero(&data, sizeof(data));
+	va_start(ar, s);
+	while (s[data.index])
+	{
+		if (s[data.index] == '%' && s[data.index + 1] != '\0')
+		{
+			(data.index)++;
+			data.return_status = handle_variadic(s, &ar, 1, &data);
+		}
+		else if (s[data.index] != '%' && s[data.index] != '\0')
+			data.return_status = char_return(s[data.index], 1, &data.count);
+		if (data.return_status == -1)
+		{
+			va_end(ar);
+			return (-1);
+		}
+		(data.index)++;
+	}
+	va_end(ar);
+	return (data.count);
 }
