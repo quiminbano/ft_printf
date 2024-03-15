@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/14 21:59:27 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:01:55 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	ft_dprintf(int fd, const char *s, ...)
 		{
 			(data.index)++;
 			data.return_status = handle_variadic(s, &ar, fd, &data);
-			(data.count) -= 2;
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], fd, &data.count);

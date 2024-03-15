@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/14 22:08:41 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/15 09:03:52 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	print_pointer(unsigned long number, int fd, t_base base, int *count)
 {
 	int	write_status;
 
-	write_status = write(1, "0x", 2);
+	write_status = write(fd, "0x", 2);
 	if (write_status == -1)
 		return (-1);
 	(*count) += 2;
