@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/20 20:53:29 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/26 12:19:33 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct s_flags
 	int	has_pure_number;
 	int	has_zero;
 	int	has_sharp;
+	int	has_space;
+	int	has_plus;
 }	t_flags;
 
 typedef struct s_printf
@@ -39,9 +41,7 @@ typedef struct s_printf
 	int		count;
 	size_t	index;
 	int		return_status;
-	size_t	flag_info;
-	size_t	to_write;
-	size_t	total_length;
+	t_flags	flags;
 }	t_printf;
 
 int	ft_printf(const char *s, ...);

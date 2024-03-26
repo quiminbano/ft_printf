@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/20 15:06:06 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/26 12:10:21 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,13 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 		data->index = (*after_flags) - 1;
 		return (1);
 	}
-	data->index = (*after_flags);
 	if (s[i] != 'd' && s[i] != 'i' && \
 		s[i] != 'c' && s[i] != 'p' && \
 		s[i] != 'x' && s[i] != 'X')
+	{
+		data->index = (*after_flags);
 		return (1);
+	}
 	return (0);
 }
 
@@ -38,6 +40,7 @@ static int	check_flags(const char *s, va_list *ar, int fd, t_printf *data)
 {
 	size_t	after_flags;
 
+	ft_bzero(&(data->flags), sizeof(data->flags));
 	if (check_undefined(s + data->index, &after_flags, data))
 		return (0);
 	
