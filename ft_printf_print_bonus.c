@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/27 19:34:28 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:14:26 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,9 @@ int	print_number(unsigned long number, t_base base, t_printf *data)
 		base_num = 16;
 	if (number >= base_num)
 	{
-		write_status = print_number((number / base_num), base, data);
-		if (write_status == -1)
+		if (print_number((number / base_num), base, data) == -1)
 			return (-1);
-		write_status = print_number((number % base_num), base, data);
-		if (write_status == -1)
+		if (print_number((number % base_num), base, data) == -1)
 			return (-1);
 	}
 	else if (base == UPPER)
@@ -41,15 +39,23 @@ int	print_number(unsigned long number, t_base base, t_printf *data)
 	return (0);
 }
 
-int	print_pointer(unsigned long number, t_base base, t_printf *data)
+int	print_unsigned(unsigned long number, t_base base, t_printf *data)
 {
 	int	write_status;
 
-	write_status = write(data->fd, "0x", 2);
+	if (data->conversion == 'p')
+	{
+		data->flags.has_sharp = 1;
+		data->flags.type_sharp = LOWER;
+	}
+	if (print_identation(data, data->size_number, BEFORE) == -1)
+		return (-1);
+	write_status = print_number(number, base, data);
 	if (write_status == -1)
 		return (-1);
-	data->count += 2;
-	return (print_number(number, base, data));
+	if (print_identation(data, data->size_number, AFTER) == -1)
+		return (-1);
+	return (0);
 }
 
 int	nbr_return(long long number, t_base base, t_printf *data)
@@ -65,9 +71,13 @@ int	nbr_return(long long number, t_base base, t_printf *data)
 		write_status = char_return('-', data);
 		if (write_status == -1)
 			return (-1);
-		return (print_number((number * -1), base, data));
+		number *= -1;
 	}
-	return (print_number(number, base, data));
+	if (print_number(number, base, data) == -1)
+		return (-1);
+	if (print_identation(data, data->size_number, AFTER) == -1)
+		return (-1);
+	return (0);
 }
 
 int	char_return(char c, t_printf *data)

@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/27 19:30:55 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:13:21 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_flags
 
 typedef struct s_printf
 {
+	char	conversion;
 	int		count;
 	int		fd;
 	int		return_status;
@@ -60,7 +61,7 @@ int		ft_dprintf(int fd, const char *s, ...);
 int		str_return(char *str, t_printf *data);
 int		char_return(char c, t_printf *data);
 int		nbr_return(long long number, t_base base, t_printf *data);
-int		print_pointer(unsigned long number, t_base base, t_printf *data);
+int		print_unsigned(unsigned long number, t_base base, t_printf *data);
 int		print_number(unsigned long number, t_base base, t_printf *data);
 void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s);
 int		fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s);

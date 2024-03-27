@@ -6,35 +6,52 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 13:33:33 by corellan          #+#    #+#              #
-#    Updated: 2024/03/14 14:24:05 by corellan         ###   ########.fr        #
+#    Updated: 2024/03/28 00:23:57 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
-SRC = ft_printf.c ft_printf_utils.c
+SRC = ft_printf.c ft_printf_print.c 
 
-OUT = $(SRC:.c=.o)
+SRC_B = ft_printf_bonus.c ft_printf_print_bonus.c ft_printf_utils_bonus.c \
+ft_printf_flags_bonus.c ft_printf_flags_print_bonus.c
+
+OBJ = $(SRC:.c=.o)
+
+OBJ_B = $(SRC_B:.c=.o)
 
 FLAGS = -Wall -Wextra -Werror
 
-LIB = ft_printf.h
+LIB = -I.
 
 CC = cc
 
 all: $(NAME)
 
-$(NAME): $(OUT)
-		$(MAKE) -C ./libft
+$(NAME): $(OBJ)
+		$(MAKE) bonus -C ./libft
 		cp libft/libft.a .
 		mv libft.a libftprintf.a
-		$(CC) -c $(FLAGS) -I$(LIB) $(SRC)
-		ar rc $(NAME) $(OUT)
+		$(CC) -c $(FLAGS) $(LIB) $(SRC)
+		ar rc $(NAME) $(OBJ)
 		ranlib $(NAME)
+
+bonus: .bonus
+
+.bonus: $(OBJ_B)
+		$(MAKE) bonus -C ./libft
+		cp libft/libft.a .
+		mv libft.a libftprintf.a
+		$(CC) -c $(FLAGS) $(LIB) $(SRC_B)
+		ar rc $(NAME) $(OBJ_B)
+		ranlib $(NAME)
+		@touch .bonus
 
 clean:
 		$(MAKE) clean -C ./libft
-		rm -f $(OUT)
+		rm -f $(OBJ)
+		@rm -f .bonus
 
 fclean: clean
 		$(MAKE) fclean -C ./libft

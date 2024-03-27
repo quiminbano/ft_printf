@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/27 16:26:59 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:16:55 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,28 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 	return (0);
 }
 
+static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
+{
+	data->conversion = s[data->index];
+	if (data->conversion == 'd' || data->conversion == 'i')
+		return (nbr_return(va_arg(*ar, int), NORMAL, data));
+	else if (data->conversion == 'c')
+		return (char_return(va_arg(*ar, int), data));
+	else if (data->conversion == 'u')
+		return (print_unsigned(va_arg(*ar, unsigned int), NORMAL, data));
+	else if (data->conversion == 'x')
+		return (print_unsigned(va_arg(*ar, unsigned int), LOWER, data));
+	else if (data->conversion == 'X')
+		return (print_unsigned(va_arg(*ar, unsigned int), UPPER, data));
+	else if (data->conversion == 'p')
+		return (print_unsigned(va_arg(*ar, unsigned long), LOWER, data));
+	else if (data->conversion == 's')
+		return (str_return(va_arg(*ar, char *), data));
+	else if (data->conversion == '%')
+		return (char_return('%', data));
+	return (0);
+}
+
 static int	check_flags(const char *s, va_list *ar, t_printf *data)
 {
 	size_t	after_flags;
@@ -50,27 +72,13 @@ static int	check_flags(const char *s, va_list *ar, t_printf *data)
 			return (-1);
 		data->index++;
 	}
-}
-
-static int	handle_variadic(const char *s, va_list *ar, int fd, t_printf *data)
-{
-	if (s[data->index] == 'd' || s[data->index] == 'i')
-		return (nbr_return(va_arg(*ar, int), NORMAL, data));
-	else if (s[data->index] == 'c')
-		return (char_return(va_arg(*ar, int), data));
-	else if (s[data->index] == 'u')
-		return (print_number(va_arg(*ar, unsigned int), NORMAL, data));
-	else if (s[data->index] == 'x')
-		return (print_number(va_arg(*ar, unsigned int), LOWER, data));
-	else if (s[data->index] == 'X')
-		return (print_number(va_arg(*ar, unsigned int), UPPER, data));
-	else if (s[data->index] == 'p')
-		return (print_pointer(va_arg(*ar, unsigned long), LOWER, data));
-	else if (s[data->index] == 's')
-		return (str_return(va_arg(*ar, char *), data));
-	else if (s[data->index] == '%')
-		return (char_return('%', data));
-	return (0);
+	if (s[data->index] == 'x' || s[data->index] == 'X' || \
+		s[data->index] == 'p')
+		data->size_number = length_number(s[data->index], ar, 16);
+	else if (s[data->index] == 'd' || s[data->index] == 'i' || \
+		s[data->index] == 'u')
+		data->size_number = length_number(s[data->index], ar, 10);
+	return (handle_variadic(s, ar, data));
 }
 
 int	ft_dprintf(int fd, const char *s, ...)
