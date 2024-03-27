@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/27 17:00:51 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:31:43 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 
 	converted_number = 0;
 	numbers_size = 0;
-	while (ft_isdigit(s + ((*begin) + 1) + numbers_size))
+	while (ft_isdigit(s[((*begin) + 1) + numbers_size]))
 		numbers_size++;
 	if (!numbers_size)
 		return (0);

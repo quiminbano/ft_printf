@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 00:14:26 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:29:25 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@ int	print_number(unsigned long number, t_base base, t_printf *data)
 		base_num = 16;
 	if (number >= base_num)
 	{
-		if (print_number((number / base_num), base, data) == -1)
+		write_status = print_number((number / base_num), base, data);
+		if (write_status == -1)
 			return (-1);
-		if (print_number((number % base_num), base, data) == -1)
+		write_status = print_number((number % base_num), base, data);
+		if (write_status == -1)
 			return (-1);
 	}
 	else if (base == UPPER)

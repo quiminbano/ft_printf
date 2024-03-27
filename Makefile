@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 13:33:33 by corellan          #+#    #+#              #
-#    Updated: 2024/03/28 00:23:57 by corellan         ###   ########.fr        #
+#    Updated: 2024/03/28 00:26:46 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ bonus: .bonus
 
 clean:
 		$(MAKE) clean -C ./libft
-		rm -f $(OBJ)
+		rm -f $(OBJ) $(OBJ_B)
 		@rm -f .bonus
 
 fclean: clean

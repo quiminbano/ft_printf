@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:42:13 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/27 23:42:50 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:35:17 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ size_t	length_number(const char c, va_list *ar, int base)
 	va_copy(copy, *ar);
 	original = 0;
 	result = 0;
+	number = 0;
 	if (c == 'x' || c == 'X' || c == 'u')
 		number = va_arg(copy, unsigned int);
 	else if (c == 'd')

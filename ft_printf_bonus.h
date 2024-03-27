@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 00:13:21 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 00:32:48 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef struct s_flags
 	int		has_sharp;
 	int		has_space;
 	int		has_plus;
-	int		size_string;
-	int		size_print;
+	size_t	size_string;
+	size_t	size_print;
 	int		number_for_dot;
 	t_base	type_sharp;
 }	t_flags;
