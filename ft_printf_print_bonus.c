@@ -6,13 +6,13 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/19 13:14:18 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/27 19:34:28 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-int	print_number(unsigned long number, int fd, t_base base, int *count)
+int	print_number(unsigned long number, t_base base, t_printf *data)
 {
 	int				write_status;
 	unsigned long	base_num;
@@ -25,73 +25,87 @@ int	print_number(unsigned long number, int fd, t_base base, int *count)
 		base_num = 16;
 	if (number >= base_num)
 	{
-		write_status = print_number((number / base_num), fd, base, count);
+		write_status = print_number((number / base_num), base, data);
 		if (write_status == -1)
 			return (-1);
-		write_status = print_number((number % base_num), fd, base, count);
+		write_status = print_number((number % base_num), base, data);
 		if (write_status == -1)
 			return (-1);
 	}
 	else if (base == UPPER)
-		write_status = char_return(upper_base[number], fd, count);
+		write_status = char_return(upper_base[number], data);
 	else
-		write_status = char_return(lower_base[number], fd, count);
+		write_status = char_return(lower_base[number], data);
 	if (write_status == -1)
 		return (-1);
 	return (0);
 }
 
-int	print_pointer(unsigned long number, int fd, t_base base, int *count)
+int	print_pointer(unsigned long number, t_base base, t_printf *data)
 {
 	int	write_status;
 
-	write_status = write(fd, "0x", 2);
+	write_status = write(data->fd, "0x", 2);
 	if (write_status == -1)
 		return (-1);
-	(*count) += 2;
-	return (print_number(number, fd, base, count));
+	data->count += 2;
+	return (print_number(number, base, data));
 }
 
-int	nbr_return(long long number, int fd, t_base base, int *count)
+int	nbr_return(long long number, t_base base, t_printf *data)
 {
 	int	write_status;
 
+	if (data->flags.has_plus)
+		data->size_number += 1;
+	if (print_identation(data, data->size_number, BEFORE) == -1)
+		return (-1);
 	if (number < 0)
 	{
-		write_status = char_return('-', fd, count);
+		write_status = char_return('-', data);
 		if (write_status == -1)
 			return (-1);
-		return (print_number((number * -1), fd, base, count));
+		return (print_number((number * -1), base, data));
 	}
-	return (print_number(number, fd, base, count));
+	return (print_number(number, base, data));
 }
 
-int	char_return(char c, int fd, int *count)
+int	char_return(char c, t_printf *data)
 {
 	int	write_status;
 
-	write_status = write(fd, &c, 1);
+	if (print_identation(data, 1, BEFORE) == -1)
+		return (-1);
+	write_status = write(data->fd, &c, 1);
 	if (write_status == -1)
 		return (-1);
-	(*count) += 1;
+	data->count += 1;
+	if (print_identation(data, 1, AFTER) == -1)
+		return (-1);
 	return (0);
 }
 
-int	str_return(char *str, int fd, int *count)
+int	str_return(char *str, t_printf *data)
 {
-	int	write_status;
+	int		write_status;
+	size_t	size_string;
 
 	if (str == NULL)
-	{
-		write_status = write(fd, "(null)", 6);
-		(*count) += 6;
-	}
+		size_string = 6;
 	else
-	{
-		write_status = write(fd, str, ft_strlen(str));
-		(*count) += (int)ft_strlen(str);
-	}
+		size_string = ft_strlen(str);
+	if (data->flags.has_dot && data->flags.size_string < size_string)
+		size_string = data->flags.size_string;
+	if (print_identation(data, size_string, BEFORE) == -1)
+		return (-1);
+	if (str == NULL)
+		write_status = write(data->fd, "(null)", size_string);
+	else
+		write_status = write(data->fd, str, size_string);
+	data->count += (int)size_string;
 	if (write_status == -1)
+		return (-1);
+	if (print_identation(data, size_string, AFTER) == -1)
 		return (-1);
 	return (0);
 }

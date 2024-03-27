@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/26 12:10:21 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/27 16:26:59 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 {
 	size_t	i;
 
-	i = 0;
+	i = data->index;
 	while (s[i] == '#' || s[i] == '+' || s[i] == '-' || s[i] == ' ' || \
 		s[i] == '.' || ft_isdigit(s[i]))
 		i++;
-	(*after_flags) += i;
+	(*after_flags) = i;
 	if (s[i] == '\0')
 	{
-		data->index = (*after_flags) - 1;
+		data->index = ((*after_flags) - 1);
 		return (1);
 	}
 	if (s[i] != 'd' && s[i] != 'i' && \
@@ -36,37 +36,40 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 	return (0);
 }
 
-static int	check_flags(const char *s, va_list *ar, int fd, t_printf *data)
+static int	check_flags(const char *s, va_list *ar, t_printf *data)
 {
 	size_t	after_flags;
 
-	ft_bzero(&(data->flags), sizeof(data->flags));
-	if (check_undefined(s + data->index, &after_flags, data))
+	after_flags = 0;
+	if (check_undefined(s, &after_flags, data))
 		return (0);
-	
+	fill_format(&(data->flags), data->index, after_flags, s);
+	while (data->index < after_flags)
+	{
+		if (fill_ident(&(data->flags), &(data->index), after_flags, s) == -1)
+			return (-1);
+		data->index++;
+	}
 }
 
 static int	handle_variadic(const char *s, va_list *ar, int fd, t_printf *data)
 {
-	int	*count;
-
-	count = &(data->count);
 	if (s[data->index] == 'd' || s[data->index] == 'i')
-		return (nbr_return(va_arg(*ar, int), fd, NORMAL, count));
+		return (nbr_return(va_arg(*ar, int), NORMAL, data));
 	else if (s[data->index] == 'c')
-		return (char_return(va_arg(*ar, int), fd, count));
+		return (char_return(va_arg(*ar, int), data));
 	else if (s[data->index] == 'u')
-		return (print_number(va_arg(*ar, unsigned int), fd, NORMAL, count));
+		return (print_number(va_arg(*ar, unsigned int), NORMAL, data));
 	else if (s[data->index] == 'x')
-		return (print_number(va_arg(*ar, unsigned int), fd, LOWER, count));
+		return (print_number(va_arg(*ar, unsigned int), LOWER, data));
 	else if (s[data->index] == 'X')
-		return (print_number(va_arg(*ar, unsigned int), fd, UPPER, count));
+		return (print_number(va_arg(*ar, unsigned int), UPPER, data));
 	else if (s[data->index] == 'p')
-		return (print_pointer(va_arg(*ar, unsigned long), fd, LOWER, count));
+		return (print_pointer(va_arg(*ar, unsigned long), LOWER, data));
 	else if (s[data->index] == 's')
-		return (str_return(va_arg(*ar, char *), fd, count));
+		return (str_return(va_arg(*ar, char *), data));
 	else if (s[data->index] == '%')
-		return (char_return('%', fd, count));
+		return (char_return('%', data));
 	return (0);
 }
 
@@ -77,15 +80,17 @@ int	ft_dprintf(int fd, const char *s, ...)
 
 	ft_bzero(&data, sizeof(data));
 	va_start(ar, s);
+	data.fd = fd;
 	while (s[data.index])
 	{
+		ft_bzero(&(data.flags), sizeof(data.flags));
 		if (s[data.index] == '%' && s[data.index + 1] != '\0')
 		{
 			(data.index)++;
-			data.return_status = check_flags(s, &ar, fd, &data);
+			data.return_status = check_flags(s, &ar, &data);
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
-			data.return_status = char_return(s[data.index], fd, &data.count);
+			data.return_status = char_return(s[data.index], &data);
 		if (data.return_status == -1)
 		{
 			va_end(ar);
@@ -104,15 +109,17 @@ int	ft_printf(const char *s, ...)
 
 	ft_bzero(&data, sizeof(data));
 	va_start(ar, s);
+	data.fd = 1;
 	while (s[data.index])
 	{
+		ft_bzero(&(data.flags), sizeof(data.flags));
 		if (s[data.index] == '%' && s[data.index + 1] != '\0')
 		{
 			(data.index)++;
-			data.return_status = check_flags(s, &ar, 1, &data);
+			data.return_status = check_flags(s, &ar, &data);
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
-			data.return_status = char_return(s[data.index], 1, &data.count);
+			data.return_status = char_return(s[data.index], &data.count);
 		if (data.return_status == -1)
 		{
 			va_end(ar);

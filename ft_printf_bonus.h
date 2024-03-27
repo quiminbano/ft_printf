@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/26 12:19:33 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/27 19:30:55 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,32 +24,47 @@ typedef enum e_base
 	LOWER
 }	t_base;
 
+typedef enum when
+{
+	BEFORE,
+	AFTER
+}	t_when;
 
 typedef struct s_flags
 {
-	int	has_minus;
-	int	has_dot;
-	int	has_pure_number;
-	int	has_zero;
-	int	has_sharp;
-	int	has_space;
-	int	has_plus;
+	int		has_minus;
+	int		has_dot;
+	int		has_pure_number;
+	int		has_zero;
+	int		has_sharp;
+	int		has_space;
+	int		has_plus;
+	int		size_string;
+	int		size_print;
+	int		number_for_dot;
+	t_base	type_sharp;
 }	t_flags;
 
 typedef struct s_printf
 {
 	int		count;
-	size_t	index;
+	int		fd;
 	int		return_status;
+	size_t	index;
+	size_t	size_number;
 	t_flags	flags;
 }	t_printf;
 
-int	ft_printf(const char *s, ...);
-int	ft_dprintf(int fd, const char *s, ...);
-int	str_return(char *str, int fd, int *count);
-int	char_return(char c, int fd, int *count);
-int	nbr_return(long long number, int fd, t_base base, int *count);
-int	print_pointer(unsigned long number, int fd, t_base base, int *count);
-int	print_number(unsigned long number, int fd, t_base base, int *count);
+int		ft_printf(const char *s, ...);
+int		ft_dprintf(int fd, const char *s, ...);
+int		str_return(char *str, t_printf *data);
+int		char_return(char c, t_printf *data);
+int		nbr_return(long long number, t_base base, t_printf *data);
+int		print_pointer(unsigned long number, t_base base, t_printf *data);
+int		print_number(unsigned long number, t_base base, t_printf *data);
+void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s);
+int		fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s);
+size_t	length_number(const char c, va_list *ar, int base);
+int		print_identation(t_printf *data, size_t size_parameter, t_when when);
 
 #endif

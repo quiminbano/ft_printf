@@ -75,6 +75,19 @@ int	main(void)
 	printf("%-010pworld\n", &test); // Output: "0x7ffee80bc708world"
 	printf("%020-010pworld\n", &test); // Output: "0x7ffee80bc708world"
 	printf("%-.-.-10pworld\n\n\n", &test); // Output: "0x7ffee80bc708world"
+//NOW WITH CHARS
+	printf("CHARS:\n\n");
+	printf("%20cworld\n", 'c'); // Output: "                   cworld"
+	printf("%-10cworld\n", 'c'); // Output: "c         world"
+	printf("%.4cworld\n", 'c'); // Output: "cworld"
+	printf("%.cworld\n", 'c'); // Output: "cworld"
+	printf("%20-10cworld\n", 'c'); // Output: "c         world"
+	printf("%20.-10cworld\n", 'c'); // Output: "c         world"
+	printf("%020cworld\n", 'c'); // Output: "0000000000000000000cworld"
+	printf("%-010cworld\n", 'c'); // Output: "c         world"
+	printf("%020-010cworld\n", 'c'); // Output: "c         world"
+	printf("%-.-.-10cworld\n\n\n", 'c'); // Output: "c         world"
+//NOW WITH OTHER FLAGS
 	printf("NOW TESTING #+ :\n\n\n");
 	printf("STRING:\n\n");
 	printf("%# +20sworld\n", "HELLO"); // Output: "               HELLOworld"
@@ -147,5 +160,16 @@ int	main(void)
 	printf("%# +-010pworld\n", &test); // Output: "0x7ffee80bc708world"
 	printf("%# +020-010pworld\n", &test); // Output: "0x7ffee80bc708world"
 	printf("%# +-.-.-10pworld\n\n\n", &test); // Output: "0x7ffee80bc708world"
+	printf("CHARS:\n\n");
+	printf("%# +20cworld\n", 'c'); // Output: "                   cworld"
+	printf("%# +-10cworld\n", 'c'); // Output: "c         world"
+	printf("%# +.4cworld\n", 'c'); // Output: "cworld"
+	printf("%# +.cworld\n", 'c'); // Output: "cworld"
+	printf("%# +20-10cworld\n", 'c'); // Output: "c         world"
+	printf("%# +20.-10cworld\n", 'c'); // Output: "c         world"
+	printf("%# +020cworld\n", 'c'); // Output: "0000000000000000000cworld"
+	printf("%# +-010cworld\n", 'c'); // Output: "c         world"
+	printf("%# +020-010cworld\n", 'c'); // Output: "c         world"
+	printf("%# +-.-.-10cworld\n\n\n", 'c'); // Output: "c         world"
 	return (0);
 }
