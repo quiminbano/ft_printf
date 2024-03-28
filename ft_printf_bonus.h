@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 00:32:48 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 17:15:33 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ typedef enum e_base
 	LOWER
 }	t_base;
 
+typedef enum e_char
+{
+	CHAR,
+	NUMBER
+}	t_char;
+
 typedef enum when
 {
 	BEFORE,
@@ -32,6 +38,7 @@ typedef enum when
 
 typedef struct s_flags
 {
+	char	begin;
 	int		has_minus;
 	int		has_dot;
 	int		has_pure_number;
@@ -59,7 +66,7 @@ typedef struct s_printf
 int		ft_printf(const char *s, ...);
 int		ft_dprintf(int fd, const char *s, ...);
 int		str_return(char *str, t_printf *data);
-int		char_return(char c, t_printf *data);
+int		char_return(char c, t_printf *data, t_char flag);
 int		nbr_return(long long number, t_base base, t_printf *data);
 int		print_unsigned(unsigned long number, t_base base, t_printf *data);
 int		print_number(unsigned long number, t_base base, t_printf *data);

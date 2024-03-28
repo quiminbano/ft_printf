@@ -1,20 +1,21 @@
 #include <stdio.h>
+#include "ft_printf_bonus.h"
 
 int	main(void)
 {
 	int	test = 123;
 
 	printf("STRING:\n\n");
-	printf("%20sworld\n", "HELLO"); // Output: "               HELLOworld"
-	printf("%-10sworld\n", "HELLO"); // Output: "HELLO     world"
-	printf("%.4sworld\n", "HELLO"); // Output: "HELLworld"
-	printf("%.sworld\n", "HELLO"); // Output: "world"
-	printf("%20-10sworld\n", "HELLO"); // Output: "HELLO     world"
-	printf("%20.-10sworld\n", "HELLO"); // Output: "         world"
-	printf("%020sworld\n", "HELLO"); // Output: "000000000000000HELLOworld"
-	printf("%-010sworld\n", "HELLO"); // Output: "HELLO     world"
-	printf("%020-010sworld\n", "HELLO"); // Output: "HELLO     world"
-	printf("%-.-.-10sworld\n\n\n", "HELLO"); // Output: "          world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%20sworld\n", "HELLO"), ft_printf("%20sworld\n", "HELLO")); // Output printf: "               HELLOworld"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%-10sworld\n", "HELLO"), ft_printf("%-10sworld\n", "HELLO")); // Output printf: "HELLO     world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%.4sworld\n", "HELLO"), ft_printf("%.4sworld\n", "HELLO")); // Output printf: "HELLworld"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%.sworld\n", "HELLO"), ft_printf("%.sworld\n", "HELLO")); // Output printf: "world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%20-10sworld\n", "HELLO"), ft_printf("%20-10sworld\n", "HELLO")); // Output printf: "HELLO     world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%20.-10sworld\n", "HELLO"), ft_printf("%20.-10sworld\n", "HELLO")); // Output printf: "         world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%020sworld\n", "HELLO"), ft_printf("%020sworld\n", "HELLO")); // Output printf: "000000000000000HELLOworld"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%-010sworld\n", "HELLO"), ft_printf("%-010sworld\n", "HELLO")); // Output printf: "HELLO     world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%020-010sworld\n", "HELLO"), ft_printf("%020-010sworld\n", "HELLO")); // Output printf: "HELLO     world"
+	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%-.-.-10sworld\n", "HELLO"), ft_printf("%-.-.-10sworld\n", "HELLO")); // Output printf: "          world"
 //NOW WITH DIGITS
 	printf("DIGIT:\n\n");
 	printf("%20dworld\n", 123); // Output: "                 123world"

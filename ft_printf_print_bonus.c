@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 00:29:25 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 13:40:04 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	print_number(unsigned long number, t_base base, t_printf *data)
 			return (-1);
 	}
 	else if (base == UPPER)
-		write_status = char_return(upper_base[number], data);
+		write_status = char_return(upper_base[number], data, NUMBER);
 	else
-		write_status = char_return(lower_base[number], data);
+		write_status = char_return(lower_base[number], data, NUMBER);
 	if (write_status == -1)
 		return (-1);
 	return (0);
@@ -70,7 +70,7 @@ int	nbr_return(long long number, t_base base, t_printf *data)
 		return (-1);
 	if (number < 0)
 	{
-		write_status = char_return('-', data);
+		write_status = char_return('-', data, NUMBER);
 		if (write_status == -1)
 			return (-1);
 		number *= -1;
@@ -82,17 +82,17 @@ int	nbr_return(long long number, t_base base, t_printf *data)
 	return (0);
 }
 
-int	char_return(char c, t_printf *data)
+int	char_return(char c, t_printf *data, t_char flag)
 {
 	int	write_status;
 
-	if (print_identation(data, 1, BEFORE) == -1)
+	if (flag == CHAR && print_identation(data, 1, BEFORE) == -1)
 		return (-1);
 	write_status = write(data->fd, &c, 1);
 	if (write_status == -1)
 		return (-1);
 	data->count += 1;
-	if (print_identation(data, 1, AFTER) == -1)
+	if (flag == CHAR && print_identation(data, 1, AFTER) == -1)
 		return (-1);
 	return (0);
 }

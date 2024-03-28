@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:42:23 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 00:15:19 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 14:58:01 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,13 @@ static int	print_special(t_printf *data, t_when when)
 	return (0);
 }
 
-static int	sp_zero(t_printf *data, size_t size_parameter, t_when when, char c)
+static int	sp_zero(t_printf *data, size_t total_size, t_when when, char c)
 {
 	int		write_status;
 	size_t	iter;
 
 	iter = 0;
-	while (data->flags.has_pure_number && iter < size_parameter)
+	while (when == BEFORE && data->flags.has_pure_number && iter < total_size)
 	{
 		write_status = write(data->fd, &c, 1);
 		if (write_status == -1)
@@ -55,6 +55,15 @@ static int	sp_zero(t_printf *data, size_t size_parameter, t_when when, char c)
 	}
 	if (when == BEFORE && c == ' ' && print_special(data, when) == -1)
 		return (-1);
+	iter = 0;
+	while (when == AFTER && data->flags.has_minus && iter < total_size)
+	{
+		write_status = write(data->fd, &c, 1);
+		if (write_status == -1)
+			return (-1);
+		iter++;
+		(data->count)++;
+	}
 	return (0);
 }
 
@@ -78,9 +87,7 @@ int	print_identation(t_printf *data, size_t size_parameter, t_when when)
 		total_size -= size_parameter;
 	else
 		total_size = 0;
-	if (when == BEFORE && sp_zero(data, size_parameter, when, c) == -1)
-		return (-1);
-	if (when == AFTER && sp_zero(data, size_parameter, when, c) == -1)
+	if (sp_zero(data, total_size, when, c) == -1)
 		return (-1);
 	return (0);
 }

@@ -6,11 +6,22 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 00:31:43 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/28 17:29:39 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
+#include <stdio.h>
+
+static size_t	get_size(size_t *begin, const char *s)
+{
+	size_t	numbers_size;
+
+	numbers_size = 0;
+	while (ft_isdigit(s[(*begin) + numbers_size]))
+		numbers_size++;
+	return (numbers_size);
+}
 
 static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 {
@@ -19,12 +30,10 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 	size_t	numbers_size;
 
 	converted_number = 0;
-	numbers_size = 0;
-	while (ft_isdigit(s[((*begin) + 1) + numbers_size]))
-		numbers_size++;
+	numbers_size = get_size(begin, s);
 	if (!numbers_size)
-		return (0);
-	numbers = ft_substr(s, (*begin + 1), numbers_size);
+		return (1);
+	numbers = ft_substr(s, (*begin), numbers_size);
 	if (!numbers)
 		return (-1);
 	converted_number = ft_atoi(numbers);
@@ -32,6 +41,8 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 	numbers = NULL;
 	if (converted_number < 0 || numbers_size > 10)
 		return (-1);
+	if (fl->begin != '.' && !fl->has_minus)
+		fl->has_pure_number = 1;
 	if (fl->number_for_dot)
 		fl->size_string = converted_number;
 	else
@@ -47,6 +58,7 @@ int	fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s)
 	{
 		fl->has_minus = 1;
 		fl->has_pure_number = 0;
+		(*begin)++;
 	}
 	else if (s[*begin] == '.')
 	{
@@ -57,12 +69,11 @@ int	fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s)
 		}
 		else if (s[end] != 'c')
 			fl->has_zero = 1;
+		(*begin)++;
 	}
-	if (!fl->has_minus)
-		fl->has_pure_number = 1;
-	if (s[*begin + 1] == '0' && !fl->has_minus)
+	if (s[*begin] == '0' && !fl->has_minus)
 		fl->has_zero = 1;
-	if (s[*begin + 1] == '0')
+	if (s[*begin] == '0')
 		(*begin)++;
 	return (get_numbers(fl, begin, s));
 }
@@ -74,9 +85,10 @@ void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s)
 	iter = begin;
 	while (iter < end)
 	{
-		if (s[end] == 'd' && s[iter] == ' ' && !fl->has_plus)
+		if ((s[end] == 'd' || s[end] == 'i') && \
+			s[iter] == ' ' && !fl->has_plus)
 			fl->has_space = 1;
-		else if (s[end] == 'd' && s[iter] == '+')
+		else if ((s[end] == 'd' || s[end] == 'i') && s[iter] == '+')
 		{
 			fl->has_plus = 1;
 			fl->has_space = 0;
