@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 17:15:33 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/29 22:40:09 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef enum when
 typedef struct s_flags
 {
 	char	begin;
+	char	conversion;
 	int		has_minus;
 	int		has_dot;
 	int		has_pure_number;
@@ -48,13 +49,11 @@ typedef struct s_flags
 	int		has_plus;
 	size_t	size_string;
 	size_t	size_print;
-	int		number_for_dot;
 	t_base	type_sharp;
 }	t_flags;
 
 typedef struct s_printf
 {
-	char	conversion;
 	int		count;
 	int		fd;
 	int		return_status;

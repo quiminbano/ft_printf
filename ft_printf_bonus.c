@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 17:16:51 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/29 22:41:29 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,23 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 	return (0);
 }
 
-static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
+static int	handle_variadic(va_list *ar, t_printf *data)
 {
-	data->conversion = s[data->index];
-	if (data->conversion == 'd' || data->conversion == 'i')
+	if (data->flags.conversion == 'd' || data->flags.conversion == 'i')
 		return (nbr_return(va_arg(*ar, int), NORMAL, data));
-	else if (data->conversion == 'c')
+	else if (data->flags.conversion == 'c')
 		return (char_return(va_arg(*ar, int), data, CHAR));
-	else if (data->conversion == 'u')
+	else if (data->flags.conversion == 'u')
 		return (print_unsigned(va_arg(*ar, unsigned int), NORMAL, data));
-	else if (data->conversion == 'x')
+	else if (data->flags.conversion == 'x')
 		return (print_unsigned(va_arg(*ar, unsigned int), LOWER, data));
-	else if (data->conversion == 'X')
+	else if (data->flags.conversion == 'X')
 		return (print_unsigned(va_arg(*ar, unsigned int), UPPER, data));
-	else if (data->conversion == 'p')
+	else if (data->flags.conversion == 'p')
 		return (print_unsigned(va_arg(*ar, unsigned long), LOWER, data));
-	else if (data->conversion == 's')
+	else if (data->flags.conversion == 's')
 		return (str_return(va_arg(*ar, char *), data));
-	else if (data->conversion == '%')
+	else if (data->flags.conversion == '%')
 		return (char_return('%', data, CHAR));
 	return (0);
 }
@@ -85,7 +84,7 @@ static int	check_flags(const char *s, va_list *ar, t_printf *data)
 	else if (s[data->index] == 'd' || s[data->index] == 'i' || \
 		s[data->index] == 'u')
 		data->size_number = length_number(s[data->index], ar, 10);
-	return (handle_variadic(s, ar, data));
+	return (handle_variadic(ar, data));
 }
 
 int	ft_dprintf(int fd, const char *s, ...)

@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 13:40:04 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/29 22:39:57 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	print_unsigned(unsigned long number, t_base base, t_printf *data)
 {
 	int	write_status;
 
-	if (data->conversion == 'p')
+	if (data->flags.conversion == 'p')
 	{
 		data->flags.has_sharp = 1;
 		data->flags.type_sharp = LOWER;
