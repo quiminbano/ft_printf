@@ -6,15 +6,17 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:42:13 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/28 13:30:48 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/31 11:46:44 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static size_t	calculate_length(int base, size_t result, size_t number)
+static size_t	calculate_length(int base, size_t number)
 {
-	result += 1;
+	size_t	result;
+
+	result = 1;
 	if (number == 0)
 		return (result);
 	while ((number / base) > 0)
@@ -25,30 +27,36 @@ static size_t	calculate_length(int base, size_t result, size_t number)
 	return (result);
 }
 
+static size_t	remove_sign(long original)
+{
+	size_t	number;
+
+	number = 0;
+	if (original < 0)
+		number = (size_t)(original * -1);
+	else
+		number = (size_t)original;
+	return (number);
+}
+
 size_t	length_number(const char c, va_list *ar, int base)
 {
 	va_list	copy;
-	size_t	result;
 	size_t	number;
 	long	original;
 
 	va_copy(copy, *ar);
 	original = 0;
-	result = 0;
 	number = 0;
 	if (c == 'x' || c == 'X' || c == 'u')
 		number = va_arg(copy, unsigned int);
-	else if (c == 'd')
+	else if (c == 'd' || c == 'i')
 	{
 		original = va_arg(copy, int);
-		if (original < 0)
-		{
-			result = 1;
-			number = (size_t)(original * -1);
-		}
+		number = remove_sign(original);
 	}
 	else
 		number = va_arg(copy, unsigned long);
 	va_end(copy);
-	return (calculate_length(base, result, number));
+	return (calculate_length(base, number));
 }

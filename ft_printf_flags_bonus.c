@@ -6,12 +6,11 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/29 22:36:47 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:09:58 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
-#include <stdio.h>
 
 static size_t	get_size(size_t *begin, const char *s)
 {
@@ -42,10 +41,10 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 	if (converted_number < 0 || numbers_size > 10)
 		return (-1);
 	if (!fl->has_minus && ((fl->begin != '.') || (fl->begin == '.' && \
-		fl->conversion != 'c' && fl->conversion != 's')))
+		fl->conv != 'c' && fl->conv != 's')))
 		fl->has_pure_number = 1;
-	if (fl->begin == '.' && fl->conversion == 's')
-		fl->size_string = converted_number;
+	if (fl->begin == '.')
+		fl->size_dot = converted_number;
 	else
 		fl->size_print = converted_number;
 	(*begin) += numbers_size;
@@ -54,7 +53,7 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 
 int	fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s)
 {
-	fl->conversion = s[end];
+	fl->conv = s[end];
 	if (s[*begin] == '-')
 	{
 		fl->has_minus = 1;
@@ -63,13 +62,18 @@ int	fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s)
 	}
 	else if (s[*begin] == '.')
 	{
-		if (s[end] == 's')
+		if (fl->conv != 'c' && fl->conv != '%')
 			fl->has_dot = 1;
-		else if (s[end] != 'c')
-			fl->has_zero = 1;
+		if (fl->has_zero && fl->conv != 's' && fl->conv != 'c' && \
+			fl->conv != '%')
+		{
+			fl->has_zero = 0;
+			fl->dot_number = 1;
+		}
 		(*begin)++;
 	}
-	if (s[*begin] == '0' && !fl->has_minus)
+	if (s[*begin] == '0' && (!fl->has_minus && fl->begin != '.' && \
+		!fl->dot_number))
 		fl->has_zero = 1;
 	if (s[*begin] == '0')
 		(*begin)++;

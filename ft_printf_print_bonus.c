@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/29 22:39:57 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/31 19:55:42 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,17 +43,26 @@ int	print_number(unsigned long number, t_base base, t_printf *data)
 
 int	print_unsigned(unsigned long number, t_base base, t_printf *data)
 {
-	int	write_status;
+	size_t	backup;
 
-	if (data->flags.conversion == 'p')
+	backup = data->size_number;
+	if (data->flags.conv == 'p')
 	{
 		data->flags.has_sharp = 1;
 		data->flags.type_sharp = LOWER;
 	}
+	if (data->flags.has_sharp && data->flags.conv != 'p' && number == 0)
+		data->flags.has_sharp = 0;
+	if (data->flags.size_dot >= data->size_number)
+		data->size_number = data->flags.size_dot;
+	if (special_case(data) && !number)
+		data->size_number = 0;
 	if (print_identation(data, data->size_number, BEFORE) == -1)
 		return (-1);
-	write_status = print_number(number, base, data);
-	if (write_status == -1)
+	if ((data->size_number >= backup) && \
+		print_zeros((data->size_number - backup), data) == -1)
+		return (-1);
+	if (data->size_number && print_number(number, base, data) == -1)
 		return (-1);
 	if (print_identation(data, data->size_number, AFTER) == -1)
 		return (-1);
@@ -62,20 +71,26 @@ int	print_unsigned(unsigned long number, t_base base, t_printf *data)
 
 int	nbr_return(long long number, t_base base, t_printf *data)
 {
-	int	write_status;
+	size_t	backup;
 
-	if (data->flags.has_plus)
-		data->size_number += 1;
-	if (print_identation(data, data->size_number, BEFORE) == -1)
-		return (-1);
+	backup = data->size_number;
 	if (number < 0)
 	{
-		write_status = char_return('-', data, NUMBER);
-		if (write_status == -1)
-			return (-1);
 		number *= -1;
+		data->flags.has_plus = 0;
+		data->flags.has_space = 0;
+		data->flags.neg = 1;
 	}
-	if (print_number(number, base, data) == -1)
+	if (data->flags.size_dot >= data->size_number)
+		data->size_number = data->flags.size_dot;
+	if (special_case(data) && !number)
+		data->size_number = 0;
+	if (print_identation(data, data->size_number, BEFORE) == -1)
+		return (-1);
+	if ((data->size_number >= backup) && \
+		print_zeros((data->size_number - backup), data) == -1)
+		return (-1);
+	if (data->size_number && print_number(number, base, data) == -1)
 		return (-1);
 	if (print_identation(data, data->size_number, AFTER) == -1)
 		return (-1);
@@ -106,8 +121,8 @@ int	str_return(char *str, t_printf *data)
 		size_string = 6;
 	else
 		size_string = ft_strlen(str);
-	if (data->flags.has_dot && data->flags.size_string < size_string)
-		size_string = data->flags.size_string;
+	if (data->flags.has_dot && data->flags.size_dot < size_string)
+		size_string = data->flags.size_dot;
 	if (print_identation(data, size_string, BEFORE) == -1)
 		return (-1);
 	if (str == NULL)

@@ -22,7 +22,7 @@ int	main(void)
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%-10dworld\n", 123), ft_printf("%-10dworld\n", 123)); // Output: "123       world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%.4dworld\n", 123), ft_printf("%.4dworld\n", 123)); // Output: "0123world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%.dworld\n", 123), ft_printf("%.dworld\n", 123)); // Output: "123world"
-	printf("return printf: %d. return ft_printf: %d\n\n", printf("%20-10dworld\n", 123), ft_printf("%20-10dworld\n", 123)); // Output: "123       world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%20-10dworld\n", 123), ft_printf("%20-10dworld\n",123)); // Output: "123       world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%20.-10dworld\n", 123), ft_printf("%20.-10dworld\n", 123)); // Output: "123       world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%020dworld\n", 123), ft_printf("%020dworld\n", 123)); // Output: "00000000000000000123world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%-010dworld\n", 123), ft_printf("%-010dworld\n", 123)); // Output: "123       world"
@@ -163,6 +163,7 @@ int	main(void)
 	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%# +-.-.-10pworld\n", &test), ft_printf("%# +-.-.-10pworld\n", &test)); // Output: "0x7ffee80bc708world"
 // NOW WITH CHAR
 	printf("CHARS:\n\n");
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%cworld\n", 'c'), ft_printf("%cworld\n", 'c')); // Output: "                   cworld"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%# +20cworld\n", 'c'), ft_printf("%# +20cworld\n", 'c')); // Output: "                   cworld"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%# +-10cworld\n", 'c'), ft_printf("%# +-10cworld\n", 'c')); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%# +.4cworld\n", 'c'), ft_printf("%# +.4cworld\n", 'c')); // Output: "cworld"
@@ -173,5 +174,7 @@ int	main(void)
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%# +-010cworld\n", 'c'), ft_printf("%# +-010cworld\n", 'c')); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%# +020-010cworld\n", 'c'), ft_printf("%# +020-010cworld\n", 'c')); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%# +-.-.-10cworld\n", 'c'), ft_printf("%# +-.-.-10cworld\n", 'c')); // Output: "c         world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%08.4s\n", "HELLOOOO"), ft_printf("%08.4s\n", "HELLOOOO")); // Output: "c         world"
+	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%08.4u\n", 2), ft_printf("%08.4u\n", 2)); // Output: "c         world"
 	return (0);
 }

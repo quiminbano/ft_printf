@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/29 22:40:09 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/31 21:02:19 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ typedef enum e_base
 typedef enum e_char
 {
 	CHAR,
-	NUMBER
+	NUMBER,
+	NOCONV
 }	t_char;
 
 typedef enum when
@@ -39,7 +40,8 @@ typedef enum when
 typedef struct s_flags
 {
 	char	begin;
-	char	conversion;
+	char	conv;
+	int		dot_number;
 	int		has_minus;
 	int		has_dot;
 	int		has_pure_number;
@@ -47,7 +49,8 @@ typedef struct s_flags
 	int		has_sharp;
 	int		has_space;
 	int		has_plus;
-	size_t	size_string;
+	int		neg;
+	size_t	size_dot;
 	size_t	size_print;
 	t_base	type_sharp;
 }	t_flags;
@@ -73,5 +76,7 @@ void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s);
 int		fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s);
 size_t	length_number(const char c, va_list *ar, int base);
 int		print_identation(t_printf *data, size_t size_parameter, t_when when);
+int		print_zeros(size_t max, t_printf *data);
+int		special_case(t_printf *data);
 
 #endif

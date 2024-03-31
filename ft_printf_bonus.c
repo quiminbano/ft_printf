@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/29 22:41:29 by corellan         ###   ########.fr       */
+/*   Updated: 2024/03/30 18:32:49 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 	if (s[i] != 'd' && s[i] != 'i' && \
 		s[i] != 'c' && s[i] != 'p' && \
 		s[i] != 'x' && s[i] != 'X' && \
-		s[i] != 's' && s[i] != 'u')
+		s[i] != 's' && s[i] != 'u' && \
+		s[i] != '%')
 	{
 		data->index = (*after_flags);
 		return (1);
@@ -37,41 +38,42 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 	return (0);
 }
 
-static int	handle_variadic(va_list *ar, t_printf *data)
+static int	handle_variadic(va_list *ar, t_printf *data, const char *s)
 {
-	if (data->flags.conversion == 'd' || data->flags.conversion == 'i')
+	data->flags.conv = s[data->index];
+	if (data->flags.conv == 'd' || data->flags.conv == 'i')
 		return (nbr_return(va_arg(*ar, int), NORMAL, data));
-	else if (data->flags.conversion == 'c')
+	else if (data->flags.conv == 'c')
 		return (char_return(va_arg(*ar, int), data, CHAR));
-	else if (data->flags.conversion == 'u')
+	else if (data->flags.conv == 'u')
 		return (print_unsigned(va_arg(*ar, unsigned int), NORMAL, data));
-	else if (data->flags.conversion == 'x')
+	else if (data->flags.conv == 'x')
 		return (print_unsigned(va_arg(*ar, unsigned int), LOWER, data));
-	else if (data->flags.conversion == 'X')
+	else if (data->flags.conv == 'X')
 		return (print_unsigned(va_arg(*ar, unsigned int), UPPER, data));
-	else if (data->flags.conversion == 'p')
+	else if (data->flags.conv == 'p')
 		return (print_unsigned(va_arg(*ar, unsigned long), LOWER, data));
-	else if (data->flags.conversion == 's')
+	else if (data->flags.conv == 's')
 		return (str_return(va_arg(*ar, char *), data));
-	else if (data->flags.conversion == '%')
+	else if (data->flags.conv == '%')
 		return (char_return('%', data, CHAR));
 	return (0);
 }
 
 static int	check_flags(const char *s, va_list *ar, t_printf *data)
 {
-	size_t	after_flags;
+	size_t	after_fl;
 	int		ident_status;
 
-	after_flags = 0;
+	after_fl = 0;
 	ident_status = 0;
-	if (check_undefined(s, &after_flags, data))
+	if (check_undefined(s, &after_fl, data))
 		return (0);
-	fill_format(&(data->flags), data->index, after_flags, s);
-	while (data->index < after_flags)
+	fill_format(&(data->flags), data->index, after_fl, s);
+	while (data->index < after_fl)
 	{
 		data->flags.begin = s[data->index];
-		ident_status = fill_ident(&(data->flags), &(data->index), after_flags, s);
+		ident_status = fill_ident(&(data->flags), &(data->index), after_fl, s);
 		if (ident_status == -1)
 			return (-1);
 		else if (ident_status && data->flags.begin != '.' && \
@@ -84,7 +86,7 @@ static int	check_flags(const char *s, va_list *ar, t_printf *data)
 	else if (s[data->index] == 'd' || s[data->index] == 'i' || \
 		s[data->index] == 'u')
 		data->size_number = length_number(s[data->index], ar, 10);
-	return (handle_variadic(ar, data));
+	return (handle_variadic(ar, data, s));
 }
 
 int	ft_dprintf(int fd, const char *s, ...)
@@ -104,7 +106,7 @@ int	ft_dprintf(int fd, const char *s, ...)
 			data.return_status = check_flags(s, &ar, &data);
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
-			data.return_status = char_return(s[data.index], &data, CHAR);
+			data.return_status = char_return(s[data.index], &data, NOCONV);
 		if (data.return_status == -1)
 		{
 			va_end(ar);
@@ -133,7 +135,7 @@ int	ft_printf(const char *s, ...)
 			data.return_status = check_flags(s, &ar, &data);
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
-			data.return_status = char_return(s[data.index], &data, CHAR);
+			data.return_status = char_return(s[data.index], &data, NOCONV);
 		if (data.return_status == -1)
 		{
 			va_end(ar);
