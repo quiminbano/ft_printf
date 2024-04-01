@@ -6,24 +6,24 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/30 18:32:49 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:16:17 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
+static int	check_undef(const char *s, size_t *af, t_printf *data, va_list *ar)
 {
 	size_t	i;
 
 	i = data->index;
 	while (s[i] == '#' || s[i] == '+' || s[i] == '-' || s[i] == ' ' || \
-		s[i] == '.' || ft_isdigit(s[i]))
+		s[i] == '.' || s[i] == '*' || ft_isdigit(s[i]))
 		i++;
-	(*after_flags) = i;
+	(*af) = i;
 	if (s[i] == '\0')
 	{
-		data->index = ((*after_flags) - 1);
+		data->index = ((*af) - 1);
 		return (1);
 	}
 	if (s[i] != 'd' && s[i] != 'i' && \
@@ -32,9 +32,10 @@ static int	check_undefined(const char *s, size_t *after_flags, t_printf *data)
 		s[i] != 's' && s[i] != 'u' && \
 		s[i] != '%')
 	{
-		data->index = (*after_flags);
+		data->index = (*af);
 		return (1);
 	}
+	data->flags.ptr = ar;
 	return (0);
 }
 
@@ -67,7 +68,7 @@ static int	check_flags(const char *s, va_list *ar, t_printf *data)
 
 	after_fl = 0;
 	ident_status = 0;
-	if (check_undefined(s, &after_fl, data))
+	if (check_undef(s, &after_fl, data, ar))
 		return (0);
 	fill_format(&(data->flags), data->index, after_fl, s);
 	while (data->index < after_fl)

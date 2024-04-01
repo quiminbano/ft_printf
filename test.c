@@ -175,6 +175,7 @@ int	main(void)
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%# +020-010cworld\n", 'c'), ft_printf("%# +020-010cworld\n", 'c')); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%# +-.-.-10cworld\n", 'c'), ft_printf("%# +-.-.-10cworld\n", 'c')); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%08.4s\n", "HELLOOOO"), ft_printf("%08.4s\n", "HELLOOOO")); // Output: "c         world"
-	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%08.4u\n", 2), ft_printf("%08.4u\n", 2)); // Output: "c         world"
+	printf("return printf: %d. return ft_printf: %d\n\n", printf("%08.4u\n", 2), ft_printf("%08.4u\n", 2)); // Output: "c         world"
+	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%*.**dworld\n", 8, -20, 20, 1), ft_printf("%*.**dworld\n", 8, 2, 20, 1));
 	return (0);
 }

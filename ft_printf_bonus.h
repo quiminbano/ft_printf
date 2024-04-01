@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/31 21:02:19 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:16:10 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_flags
 	size_t	size_dot;
 	size_t	size_print;
 	t_base	type_sharp;
+	va_list	*ptr;
 }	t_flags;
 
 typedef struct s_printf

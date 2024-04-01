@@ -6,38 +6,47 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/31 21:09:58 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/01 18:29:22 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
 
-static size_t	get_size(size_t *begin, const char *s)
+static size_t	get_size(const size_t begin, const char *s)
 {
 	size_t	numbers_size;
 
 	numbers_size = 0;
-	while (ft_isdigit(s[(*begin) + numbers_size]))
+	if (s[begin] == '*')
+		return (1);
+	while (ft_isdigit(s[begin + numbers_size]))
 		numbers_size++;
 	return (numbers_size);
 }
 
+static int	asteric_to_number(t_flags *fl)
+{
+	int	number;
+
+	number = va_arg(*(fl->ptr), int);
+	if (number < 0)
+		number = 0;
+	return (number);
+}
+
 static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 {
-	char	*numbers;
 	int		converted_number;
 	size_t	numbers_size;
 
 	converted_number = 0;
-	numbers_size = get_size(begin, s);
+	numbers_size = get_size(*begin, s);
 	if (!numbers_size)
 		return (1);
-	numbers = ft_substr(s, (*begin), numbers_size);
-	if (!numbers)
-		return (-1);
-	converted_number = ft_atoi(numbers);
-	free(numbers);
-	numbers = NULL;
+	if (s[*begin] != '*')
+		converted_number = ft_atoi(s + (*begin));
+	else
+		converted_number = asteric_to_number(fl);
 	if (converted_number < 0 || numbers_size > 10)
 		return (-1);
 	if (!fl->has_minus && ((fl->begin != '.') || (fl->begin == '.' && \
