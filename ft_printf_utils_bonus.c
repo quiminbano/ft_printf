@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:42:13 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/31 11:46:44 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 11:46:30 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,6 @@ static size_t	calculate_length(int base, size_t number)
 	return (result);
 }
 
-static size_t	remove_sign(long original)
-{
-	size_t	number;
-
-	number = 0;
-	if (original < 0)
-		number = (size_t)(original * -1);
-	else
-		number = (size_t)original;
-	return (number);
-}
-
 size_t	length_number(const char c, va_list *ar, int base)
 {
 	va_list	copy;
@@ -53,7 +41,10 @@ size_t	length_number(const char c, va_list *ar, int base)
 	else if (c == 'd' || c == 'i')
 	{
 		original = va_arg(copy, int);
-		number = remove_sign(original);
+		if (original < 0)
+			number = (size_t)(original * -1);
+		else
+			number = (size_t)original;
 	}
 	else
 		number = va_arg(copy, unsigned long);
