@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:42:23 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/31 19:48:55 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:27:13 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	special_case(t_printf *data)
 {
-	if (data->flags.has_dot && !data->flags.size_dot)
+	if (data->flags.has_dot && !data->flags.size_dot && !data->flags.orig_num)
 		return (1);
 	return (0);
 }

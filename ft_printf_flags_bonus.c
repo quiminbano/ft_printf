@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 10:37:37 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:25:03 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ static int	asteric_to_number(t_flags *fl)
 
 	number = va_arg(*(fl->ptr), int);
 	if (number < 0 && fl->begin == '.')
+	{
+		fl->orig_num = number;
 		number = 0;
+	}
 	else if (number < 0)
 	{
 		fl->has_minus = 1;

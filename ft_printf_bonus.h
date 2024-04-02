@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/01 19:31:38 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 12:14:30 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_flags
 {
 	char	begin;
 	char	conv;
+	int		orig_num;
 	int		dot_number;
 	int		has_minus;
 	int		has_dot;
