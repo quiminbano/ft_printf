@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 16:51:18 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:40:09 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ static int	end_and_free(va_list *ar, t_printf *data, int value)
 
 static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
 {
-	int	*count;
-
-	count = &(data->count);
 	if (s[data->index] == 'd' || s[data->index] == 'i')
 		return (nbr_return(va_arg(*ar, int), NORMAL, data));
 	else if (s[data->index] == 'c')

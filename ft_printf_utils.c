@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:10:34 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 17:03:49 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:31:21 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,57 +20,51 @@ static char	*handle_return(char **s1, char *returned)
 	return (returned);
 }
 
-char	*append_char(char *s1, const char c)
+char	*append_char(char *s1, const char c, int count)
 {
-	size_t	len;
-	size_t	len_c;
-	size_t	i;
+	int		i;
 	char	*res;
 
-	len = 0;
-	len_c = 0;
 	i = 0;
-	if (c != '\0')
-		len_c = 1;
-	if (s1)
-		len = ft_strlen(s1);
-	res = (char *)malloc(sizeof(char) * (len + len_c + 1));
+	res = NULL;
+	if (count < 0)
+		return (handle_return(&s1, NULL));
+	res = (char *)malloc(sizeof(char) * (count + 2));
 	if (!res)
 		return (handle_return(&s1, NULL));
-	while (i < len)
+	while (i < count)
 	{
 		res[i] = s1[i];
 		i++;
 	}
-	if (len_c == 1)
-		res[i++] = c;
+	res[i] = c;
+	i++;
 	res[i] = '\0';
 	return (handle_return(&s1, res));
 }
 
-char	*append_str(char *s1, const char *s2, size_t n)
+char	*append_str(char *s1, const char *s2, int count, size_t n)
 {
-	size_t	len1;
 	size_t	len2;
 	size_t	i;
 	char	*res;
 
 	i = 0;
-	len1 = 0;
 	len2 = n;
+	res = NULL;
 	if (n > ft_strlen(s2))
 		len2 = ft_strlen(s2);
-	if (s1)
-		len1 = ft_strlen(s1);
-	res = (char *)malloc(sizeof(char) * (len1 + len2 + 1));
+	if (count < 0)
+		return (handle_return(&s1, NULL));
+	res = (char *)malloc(sizeof(char) * ((size_t)count + len2 + 1));
 	if (!res)
 		return (handle_return(&s1, NULL));
-	while (i < (len1 + len2))
+	while (i < ((size_t)count + len2))
 	{
-		if (i < len1)
+		if (i < (size_t)count)
 			res[i] = s1[i];
 		else
-			res[i] = s2[i - len1];
+			res[i] = s2[i - (size_t)count];
 		i++;
 	}
 	res[i] = '\0';

@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 16:27:24 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:37:13 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int	char_return(char c, t_printf *data, t_char flag)
 {
 	if (flag == CHAR && append_identation(data, 1, BEFORE) == -1)
 		return (-1);
-	data->str = append_char(data->str, c);
+	data->str = append_char(data->str, c, data->count);
 	if (!data->str)
 		return (-1);
 	data->count += 1;
@@ -123,9 +123,9 @@ int	str_return(char *str, t_printf *data)
 	if (append_identation(data, size_string, BEFORE) == -1)
 		return (-1);
 	if (str == NULL)
-		data->str = append_str(data->str, "(null)", size_string);
+		data->str = append_str(data->str, "(null)", data->count, size_string);
 	else
-		data->str = append_str(data->str, str, size_string);
+		data->str = append_str(data->str, str, data->count, size_string);
 	data->count += (int)size_string;
 	if (!data->str)
 		return (-1);
