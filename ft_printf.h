@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/03/14 21:55:57 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 14:09:28 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,19 @@ typedef enum e_base
 typedef struct s_printf
 {
 	int		count;
-	size_t	index;
 	int		return_status;
+	size_t	index;
+	char	*str;
 }	t_printf;
 
-int	ft_printf(const char *s, ...);
-int	ft_dprintf(int fd, const char *s, ...);
-int	str_return(char *str, int fd, int *count);
-int	char_return(char c, int fd, int *count);
-int	nbr_return(long long number, int fd, t_base base, int *count);
-int	print_pointer(unsigned long number, int fd, t_base base, int *count);
-int	print_number(unsigned long number, int fd, t_base base, int *count);
+int		ft_printf(const char *s, ...);
+int		ft_dprintf(int fd, const char *s, ...);
+int		str_return(char *str, t_printf *data);
+int		char_return(char c, t_printf *data);
+int		nbr_return(long long number, t_base base, t_printf *data);
+int		print_pointer(unsigned long number, t_base base, t_printf *data);
+int		print_number(unsigned long number, t_base base, t_printf *data);
+char	*append_str(char *s1, const char *s2, size_t n);
+char	*append_char(char *s1, const char c);
 
 #endif

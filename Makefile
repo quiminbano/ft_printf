@@ -6,13 +6,13 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 13:33:33 by corellan          #+#    #+#              #
-#    Updated: 2024/04/02 08:04:52 by corellan         ###   ########.fr        #
+#    Updated: 2024/04/02 15:27:29 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libftprintf.a
 
-SRC = ft_printf.c ft_printf_print.c 
+SRC = ft_printf.c ft_printf_print.c ft_printf_utils.c 
 
 SRC_B = ft_printf_bonus.c ft_printf_print_bonus.c ft_printf_utils_bonus.c \
 ft_printf_flags_bonus.c ft_printf_flags_print_bonus.c
