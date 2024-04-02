@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/01 19:52:14 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:37:37 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,13 @@ static size_t	get_size(const size_t begin, const char *s)
 	return (numbers_size);
 }
 
-static int	asteric_to_number(t_flags *fl, size_t *size)
+static int	asteric_to_number(t_flags *fl)
 {
-	long	number;
+	int	number;
 
-	number = va_arg(*(fl->ptr), long);
-	if ((int)number < 0 && fl->begin == '.')
+	number = va_arg(*(fl->ptr), int);
+	if (number < 0 && fl->begin == '.')
 		number = 0;
-	else if (number > INT_MAX || number < (INT_MIN + 1))
-		(*size) = 11;
 	else if (number < 0)
 	{
 		fl->has_minus = 1;
@@ -54,7 +52,7 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 	if (s[*begin] != '*')
 		converted_number = ft_atoi(s + (*begin));
 	else
-		converted_number = asteric_to_number(fl, &numbers_size);
+		converted_number = asteric_to_number(fl);
 	if (converted_number < 0 || numbers_size > 10)
 		return (-1);
 	if (!fl->has_minus && ((fl->begin != '.') || (fl->begin == '.' && \
