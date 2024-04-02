@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 13:33:33 by corellan          #+#    #+#              #
-#    Updated: 2024/03/28 00:26:46 by corellan         ###   ########.fr        #
+#    Updated: 2024/04/02 08:04:52 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ $(NAME): $(OBJ)
 		cp libft/libft.a .
 		mv libft.a libftprintf.a
 		$(CC) -c $(FLAGS) $(LIB) $(SRC)
-		ar rc $(NAME) $(OBJ)
+		ar rcs $(NAME) $(OBJ)
 		ranlib $(NAME)
 
 bonus: .bonus
@@ -44,7 +44,7 @@ bonus: .bonus
 		cp libft/libft.a .
 		mv libft.a libftprintf.a
 		$(CC) -c $(FLAGS) $(LIB) $(SRC_B)
-		ar rc $(NAME) $(OBJ_B)
+		ar rcs $(NAME) $(OBJ_B)
 		ranlib $(NAME)
 		@touch .bonus
 

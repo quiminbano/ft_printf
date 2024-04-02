@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/01 12:00:04 by corellan          #+#    #+#              #
-#    Updated: 2024/01/14 11:30:23 by corellan         ###   ########.fr        #
+#    Updated: 2024/04/02 08:04:37 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ $(NAME): $(OUT) $(GNL_OUT)
 bonus: .bonus
 
 .bonus: $(OUT_B) $(OUT) $(GNL_OUT)
-		ar rus $(NAME) $(OUT) $(OUT_B) $(GNL_OUT)
+		ar rcs $(NAME) $(OUT) $(OUT_B) $(GNL_OUT)
 		@touch .bonus
 
 %.o: %.c
