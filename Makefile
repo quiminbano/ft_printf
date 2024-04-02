@@ -6,7 +6,7 @@
 #    By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/21 13:33:33 by corellan          #+#    #+#              #
-#    Updated: 2024/04/02 16:20:05 by corellan         ###   ########.fr        #
+#    Updated: 2024/04/02 16:38:20 by corellan         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = libftprintf.a
 SRC = ft_printf.c ft_printf_append.c ft_printf_utils.c 
 
 SRC_B = ft_printf_bonus.c ft_printf_append_bonus.c ft_printf_utils_bonus.c \
-ft_printf_flags_bonus.c ft_printf_flags_append_bonus.c
+ft_printf_flags_bonus.c ft_printf_flags_append_bonus.c ft_printf_error_bonus.c
 
 OBJ = $(SRC:.c=.o)
 

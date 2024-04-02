@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 16:28:26 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:38:39 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,33 +19,6 @@ static int	end_and_free(va_list *ar, t_printf *data, int value)
 	data->str = NULL;
 	va_end(*ar);
 	return (value);
-}
-
-static int	check_undef(const char *s, size_t *af, t_printf *data, va_list *ar)
-{
-	size_t	i;
-
-	i = data->index;
-	while (s[i] == '#' || s[i] == '+' || s[i] == '-' || s[i] == ' ' || \
-		s[i] == '.' || s[i] == '*' || ft_isdigit(s[i]))
-		i++;
-	(*af) = i;
-	if (s[i] == '\0')
-	{
-		data->index = ((*af) - 1);
-		return (1);
-	}
-	if (s[i] != 'd' && s[i] != 'i' && \
-		s[i] != 'c' && s[i] != 'p' && \
-		s[i] != 'x' && s[i] != 'X' && \
-		s[i] != 's' && s[i] != 'u' && \
-		s[i] != '%')
-	{
-		data->index = (*af);
-		return (1);
-	}
-	data->flags.ptr = ar;
-	return (0);
 }
 
 static int	handle_variadic(va_list *ar, t_printf *data, const char *s)
