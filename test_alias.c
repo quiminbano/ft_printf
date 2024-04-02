@@ -177,5 +177,6 @@ int	main(void)
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%08.4s\n", "HELLOOOO"), ft_printf("%08.4s\n", "HELLOOOO")); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n", printf("%08.4u\n", 2), ft_printf("%08.4u\n", 2)); // Output: "c         world"
 	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%*.**dworld\n", -1, -20, 20, 1), ft_printf("%*.**dworld\n", -1, -20, 20, 1));
+	printf("return printf: %d. return ft_printf: %d\n\n\n", printf("%*.**dworld\n", -1, -20, 20, 1), ft_printf("%*.**dworld\n", -1, -20, 20, 1));
 	return (0);
 }
