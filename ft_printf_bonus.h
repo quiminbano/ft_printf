@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/01 18:16:10 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:31:38 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # define MAXBASE 17
 
 # include <stdarg.h>
+# include <limits.h>
 # include "libft/libft.h"
 
 typedef enum e_base

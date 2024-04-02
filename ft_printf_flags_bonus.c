@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 17:37:01 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/01 18:29:22 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/01 19:52:14 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,22 @@ static size_t	get_size(const size_t begin, const char *s)
 	return (numbers_size);
 }
 
-static int	asteric_to_number(t_flags *fl)
+static int	asteric_to_number(t_flags *fl, size_t *size)
 {
-	int	number;
+	long	number;
 
-	number = va_arg(*(fl->ptr), int);
-	if (number < 0)
+	number = va_arg(*(fl->ptr), long);
+	if ((int)number < 0 && fl->begin == '.')
 		number = 0;
-	return (number);
+	else if (number > INT_MAX || number < (INT_MIN + 1))
+		(*size) = 11;
+	else if (number < 0)
+	{
+		fl->has_minus = 1;
+		fl->has_pure_number = 0;
+		number *= -1;
+	}
+	return ((int)number);
 }
 
 static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
@@ -46,7 +54,7 @@ static int	get_numbers(t_flags *fl, size_t *begin, const char *s)
 	if (s[*begin] != '*')
 		converted_number = ft_atoi(s + (*begin));
 	else
-		converted_number = asteric_to_number(fl);
+		converted_number = asteric_to_number(fl, &numbers_size);
 	if (converted_number < 0 || numbers_size > 10)
 		return (-1);
 	if (!fl->has_minus && ((fl->begin != '.') || (fl->begin == '.' && \
