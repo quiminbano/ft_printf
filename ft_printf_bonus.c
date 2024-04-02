@@ -6,11 +6,20 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/01 18:16:17 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:28:26 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
+
+static int	end_and_free(va_list *ar, t_printf *data, int value)
+{
+	if (data->str)
+		free(data->str);
+	data->str = NULL;
+	va_end(*ar);
+	return (value);
+}
 
 static int	check_undef(const char *s, size_t *af, t_printf *data, va_list *ar)
 {
@@ -47,13 +56,13 @@ static int	handle_variadic(va_list *ar, t_printf *data, const char *s)
 	else if (data->flags.conv == 'c')
 		return (char_return(va_arg(*ar, int), data, CHAR));
 	else if (data->flags.conv == 'u')
-		return (print_unsigned(va_arg(*ar, unsigned int), NORMAL, data));
+		return (append_unsigned(va_arg(*ar, unsigned int), NORMAL, data));
 	else if (data->flags.conv == 'x')
-		return (print_unsigned(va_arg(*ar, unsigned int), LOWER, data));
+		return (append_unsigned(va_arg(*ar, unsigned int), LOWER, data));
 	else if (data->flags.conv == 'X')
-		return (print_unsigned(va_arg(*ar, unsigned int), UPPER, data));
+		return (append_unsigned(va_arg(*ar, unsigned int), UPPER, data));
 	else if (data->flags.conv == 'p')
-		return (print_unsigned(va_arg(*ar, unsigned long), LOWER, data));
+		return (append_unsigned(va_arg(*ar, unsigned long), LOWER, data));
 	else if (data->flags.conv == 's')
 		return (str_return(va_arg(*ar, char *), data));
 	else if (data->flags.conv == '%')
@@ -97,7 +106,6 @@ int	ft_dprintf(int fd, const char *s, ...)
 
 	ft_bzero(&data, sizeof(data));
 	va_start(ar, s);
-	data.fd = fd;
 	while (s[data.index])
 	{
 		ft_bzero(&(data.flags), sizeof(data.flags));
@@ -108,15 +116,13 @@ int	ft_dprintf(int fd, const char *s, ...)
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], &data, NOCONV);
-		if (data.return_status == -1)
-		{
-			va_end(ar);
-			return (-1);
-		}
+		if (data.return_status == -1 || data.count < 0)
+			return (end_and_free(&ar, &data, -1));
 		(data.index)++;
 	}
-	va_end(ar);
-	return (data.count);
+	if (write(fd, data.str, ft_strlen(data.str)) == -1)
+		return (end_and_free(&ar, &data, -1));
+	return (end_and_free(&ar, &data, data.count));
 }
 
 int	ft_printf(const char *s, ...)
@@ -126,7 +132,6 @@ int	ft_printf(const char *s, ...)
 
 	ft_bzero(&data, sizeof(data));
 	va_start(ar, s);
-	data.fd = 1;
 	while (s[data.index])
 	{
 		ft_bzero(&(data.flags), sizeof(data.flags));
@@ -137,13 +142,11 @@ int	ft_printf(const char *s, ...)
 		}
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], &data, NOCONV);
-		if (data.return_status == -1)
-		{
-			va_end(ar);
-			return (-1);
-		}
+		if (data.return_status == -1 || data.count < 0)
+			return (end_and_free(&ar, &data, -1));
 		(data.index)++;
 	}
-	va_end(ar);
-	return (data.count);
+	if (write(1, data.str, ft_strlen(data.str)) == -1)
+		return (end_and_free(&ar, &data, -1));
+	return (end_and_free(&ar, &data, data.count));
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_flags_print_bonus.c                      :+:      :+:    :+:   */
+/*   ft_printf_flags_append_bonus.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:42:23 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 12:27:13 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:30:07 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	special_case(t_printf *data)
 	return (0);
 }
 
-int	print_zeros(size_t max, t_printf *data)
+int	append_zeros(size_t max, t_printf *data)
 {
 	int		write_status;
 	size_t	iter;
@@ -36,13 +36,11 @@ int	print_zeros(size_t max, t_printf *data)
 	return (0);
 }
 
-static int	print_special(t_printf *data, t_when when)
+static int	append_special(t_printf *data, t_when when)
 {
-	int		write_status;
 	char	buff[3];
 	size_t	length;
 
-	write_status = 0;
 	ft_bzero(buff, 3);
 	if (when == BEFORE && data->flags.has_plus)
 		ft_strlcpy(buff, "+", 2);
@@ -57,8 +55,8 @@ static int	print_special(t_printf *data, t_when when)
 		data->flags.type_sharp == LOWER)
 		ft_strlcpy(buff, "0x", 3);
 	length = ft_strlen(buff);
-	write_status = write(data->fd, buff, length);
-	if (write_status == -1)
+	data->str = append_str(data->str, buff, length);
+	if (!data->str)
 		return (-1);
 	data->count += length;
 	return (0);
@@ -66,25 +64,24 @@ static int	print_special(t_printf *data, t_when when)
 
 static int	sp_zero(t_printf *data, size_t total_size, t_when when, char c)
 {
-	int		write_status;
 	size_t	iter;
 
 	iter = 0;
 	while (when == BEFORE && data->flags.has_pure_number && iter < total_size)
 	{
-		write_status = write(data->fd, &c, 1);
-		if (write_status == -1)
+		data->str = append_char(data->str, c);
+		if (!data->str)
 			return (-1);
 		iter++;
 		(data->count)++;
 	}
-	if (when == BEFORE && c == ' ' && print_special(data, when) == -1)
+	if (when == BEFORE && c == ' ' && append_special(data, when) == -1)
 		return (-1);
 	iter = 0;
 	while (when == AFTER && data->flags.has_minus && iter < total_size)
 	{
-		write_status = write(data->fd, &c, 1);
-		if (write_status == -1)
+		data->str = append_char(data->str, c);
+		if (!data->str)
 			return (-1);
 		iter++;
 		(data->count)++;
@@ -92,7 +89,7 @@ static int	sp_zero(t_printf *data, size_t total_size, t_when when, char c)
 	return (0);
 }
 
-int	print_identation(t_printf *data, size_t size_parameter, t_when when)
+int	append_identation(t_printf *data, size_t size_parameter, t_when when)
 {
 	size_t	total_size;
 	char	c;
@@ -106,7 +103,7 @@ int	print_identation(t_printf *data, size_t size_parameter, t_when when)
 		size_parameter += 1;
 	if (data->flags.has_sharp)
 		size_parameter += 2;
-	if (c == '0' && print_special(data, when) == -1)
+	if (c == '0' && append_special(data, when) == -1)
 		return (-1);
 	if (total_size >= size_parameter)
 		total_size -= size_parameter;

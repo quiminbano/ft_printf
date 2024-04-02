@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 15:25:40 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:23:12 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
 	else if (s[data->index] == 'c')
 		return (char_return(va_arg(*ar, int), data));
 	else if (s[data->index] == 'u')
-		return (print_number(va_arg(*ar, unsigned int), NORMAL, data));
+		return (append_number(va_arg(*ar, unsigned int), NORMAL, data));
 	else if (s[data->index] == 'x')
-		return (print_number(va_arg(*ar, unsigned int), LOWER, data));
+		return (append_number(va_arg(*ar, unsigned int), LOWER, data));
 	else if (s[data->index] == 'X')
-		return (print_number(va_arg(*ar, unsigned int), UPPER, data));
+		return (append_number(va_arg(*ar, unsigned int), UPPER, data));
 	else if (s[data->index] == 'p')
-		return (print_pointer(va_arg(*ar, unsigned long), LOWER, data));
+		return (append_pointer(va_arg(*ar, unsigned long), LOWER, data));
 	else if (s[data->index] == 's')
 		return (str_return(va_arg(*ar, char *), data));
 	else if (s[data->index] == '%')

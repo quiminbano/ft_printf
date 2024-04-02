@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 12:14:30 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:27:16 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ typedef struct s_flags
 
 typedef struct s_printf
 {
+	char	*str;
 	int		count;
-	int		fd;
 	int		return_status;
 	size_t	index;
 	size_t	size_number;
@@ -73,13 +73,15 @@ int		ft_dprintf(int fd, const char *s, ...);
 int		str_return(char *str, t_printf *data);
 int		char_return(char c, t_printf *data, t_char flag);
 int		nbr_return(long long number, t_base base, t_printf *data);
-int		print_unsigned(unsigned long number, t_base base, t_printf *data);
-int		print_number(unsigned long number, t_base base, t_printf *data);
+int		append_unsigned(unsigned long number, t_base base, t_printf *data);
+int		append_number(unsigned long number, t_base base, t_printf *data);
+char	*append_str(char *s1, const char *s2, size_t n);
+char	*append_char(char *s1, const char c);
 void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s);
 int		fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s);
 size_t	length_number(const char c, va_list *ar, int base);
-int		print_identation(t_printf *data, size_t size_parameter, t_when when);
-int		print_zeros(size_t max, t_printf *data);
+int		append_identation(t_printf *data, size_t size_parameter, t_when when);
+int		append_zeros(size_t max, t_printf *data);
 int		special_case(t_printf *data);
 
 #endif
