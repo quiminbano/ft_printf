@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/03 08:56:46 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 11:48:12 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	append_number(unsigned long number, t_base base, t_printf *data)
 	length = ft_strlen(str);
 	data->str = append_str(data->str, str, data->count, length);
 	free(str);
+	str = NULL;
 	if (!data->str)
 		return (-1);
 	data->count += length;

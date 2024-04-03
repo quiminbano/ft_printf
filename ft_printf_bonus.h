@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/03 10:28:47 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 12:03:46 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ int		char_return(char c, t_printf *data, t_char flag);
 int		nbr_return(long long number, t_base base, t_printf *data);
 int		append_unsigned(unsigned long number, t_base base, t_printf *data);
 int		append_number(unsigned long number, t_base base, t_printf *data);
+int		no_conv(t_printf *data, const char *s);
 char	*append_str(char *s1, const char *s2, int count, size_t n);
 char	*append_char(char *s1, const char c, int count);
 int		check_undef(const char *s, size_t *af, t_printf *data, va_list *ar);
