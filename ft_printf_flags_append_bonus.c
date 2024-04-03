@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:42:23 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:37:54 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 10:28:54 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,27 @@ int	special_case(t_printf *data)
 	return (0);
 }
 
-int	append_zeros(size_t max, t_printf *data)
+int	append_sp_zero(size_t max, t_printf *data, char *tmp)
 {
-	int		write_status;
 	size_t	iter;
 
-	write_status = 0;
 	iter = 0;
 	while (iter < max)
 	{
-		write_status = char_return('0', data, NUMBER);
-		if (write_status == -1)
+		if ((max - iter) > 1000)
+		{
+			data->str = append_str(data->str, tmp, data->count, 1000);
+			iter += 1000;
+			data->count += 1000;
+		}
+		else
+		{
+			data->str = append_str(data->str, tmp, data->count, (max - iter));
+			data->count += (max - iter);
+			iter = max;
+		}
+		if (!data->str)
 			return (-1);
-		iter++;
 	}
 	return (0);
 }
@@ -62,54 +70,42 @@ static int	append_special(t_printf *data, t_when when)
 	return (0);
 }
 
-static int	sp_zero(t_printf *data, size_t total_size, t_when when, char c)
+static int	sp_zero(t_printf *data, size_t max, t_when when, char *tmp)
 {
-	size_t	iter;
+	int	status;
 
-	iter = 0;
-	while (when == BEFORE && data->flags.has_pure_number && iter < total_size)
-	{
-		data->str = append_char(data->str, c, data->count);
-		if (!data->str)
-			return (-1);
-		iter++;
-		(data->count)++;
-	}
-	if (when == BEFORE && c == ' ' && append_special(data, when) == -1)
+	status = 0;
+	if (when == BEFORE && data->flags.has_pure_number && \
+		append_sp_zero(max, data, tmp) == -1)
 		return (-1);
-	iter = 0;
-	while (when == AFTER && data->flags.has_minus && iter < total_size)
-	{
-		data->str = append_char(data->str, c, data->count);
-		if (!data->str)
-			return (-1);
-		iter++;
-		(data->count)++;
-	}
+	if (when == BEFORE && tmp == data->sp && append_special(data, when) == -1)
+		return (-1);
+	if (when == AFTER && data->flags.has_minus && \
+		append_sp_zero(max, data, tmp) == -1)
+		return (-1);
 	return (0);
 }
 
 int	append_identation(t_printf *data, size_t size_parameter, t_when when)
 {
 	size_t	total_size;
-	char	c;
+	char	*tmp;
 
 	total_size = data->flags.size_print;
+	tmp = data->sp;
 	if (data->flags.has_zero && data->flags.has_pure_number)
-		c = '0';
-	else
-		c = ' ';
+		tmp = data->zero;
 	if (data->flags.has_plus || data->flags.has_space || data->flags.neg)
 		size_parameter += 1;
 	if (data->flags.has_sharp)
 		size_parameter += 2;
-	if (c == '0' && append_special(data, when) == -1)
+	if (tmp == data->zero && append_special(data, when) == -1)
 		return (-1);
 	if (total_size >= size_parameter)
 		total_size -= size_parameter;
 	else
 		total_size = 0;
-	if (sp_zero(data, total_size, when, c) == -1)
+	if (sp_zero(data, total_size, when, tmp) == -1)
 		return (-1);
 	return (0);
 }

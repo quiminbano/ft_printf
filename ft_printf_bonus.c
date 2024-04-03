@@ -6,11 +6,12 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 16:52:15 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 10:06:58 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
+#include <stdio.h>
 
 static int	end_and_free(va_list *ar, t_printf *data, int value)
 {
@@ -78,6 +79,8 @@ int	ft_dprintf(int fd, const char *s, ...)
 	t_printf	data;
 
 	ft_bzero(&data, sizeof(data));
+	ft_memset(data.zero, '0', 1000);
+	ft_memset(data.sp, ' ', 1000);
 	va_start(ar, s);
 	while (s[data.index])
 	{
@@ -93,7 +96,7 @@ int	ft_dprintf(int fd, const char *s, ...)
 			return (end_and_free(&ar, &data, -1));
 		(data.index)++;
 	}
-	if (data.str && write(fd, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(fd, data.str, data.count) == -1)
 		return (end_and_free(&ar, &data, -1));
 	return (end_and_free(&ar, &data, data.count));
 }
@@ -104,6 +107,8 @@ int	ft_printf(const char *s, ...)
 	t_printf	data;
 
 	ft_bzero(&data, sizeof(data));
+	ft_memset(data.zero, '0', 1000);
+	ft_memset(data.sp, ' ', 1000);
 	va_start(ar, s);
 	while (s[data.index])
 	{
@@ -119,7 +124,7 @@ int	ft_printf(const char *s, ...)
 			return (end_and_free(&ar, &data, -1));
 		(data.index)++;
 	}
-	if (data.str && write(1, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(1, data.str, data.count) == -1)
 		return (end_and_free(&ar, &data, -1));
 	return (end_and_free(&ar, &data, data.count));
 }

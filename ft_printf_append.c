@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:41:04 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 08:56:46 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,23 @@
 
 int	append_number(unsigned long number, t_base base, t_printf *data)
 {
-	int				write_status;
 	unsigned long	base_num;
-	const char		*lower_base = "0123456789abcdef";
-	const char		*upper_base = "0123456789ABCDEF";
+	size_t			length;
+	char			*str;
 
 	if (base == NORMAL)
 		base_num = 10;
 	else
 		base_num = 16;
-	if (number >= base_num)
-	{
-		write_status = append_number((number / base_num), base, data);
-		if (write_status == -1)
-			return (-1);
-		write_status = append_number((number % base_num), base, data);
-		if (write_status == -1)
-			return (-1);
-	}
-	else if (base == UPPER)
-		write_status = char_return(upper_base[number], data);
-	else
-		write_status = char_return(lower_base[number], data);
-	if (write_status == -1)
+	str = ft_ultoa_base(number, base_num, (size_t)base);
+	if (!str)
 		return (-1);
+	length = ft_strlen(str);
+	data->str = append_str(data->str, str, data->count, length);
+	free(str);
+	if (!data->str)
+		return (-1);
+	data->count += length;
 	return (0);
 }
 

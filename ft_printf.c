@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:40:09 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 09:15:38 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_dprintf(int fd, const char *s, ...)
 			return (end_and_free(&ar, &data, -1));
 		(data.index)++;
 	}
-	if (data.str && write(fd, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(fd, data.str, data.count) == -1)
 		return (end_and_free(&ar, &data, -1));
 	return (end_and_free(&ar, &data, data.count));
 }
@@ -87,7 +87,7 @@ int	ft_printf(const char *s, ...)
 			return (end_and_free(&ar, &data, -1));
 		(data.index)++;
 	}
-	if (data.str && write(1, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(1, data.str, data.count) == -1)
 		return (end_and_free(&ar, &data, -1));
 	return (end_and_free(&ar, &data, data.count));
 }

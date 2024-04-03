@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:32:28 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/03 10:28:47 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ typedef struct s_flags
 typedef struct s_printf
 {
 	char	*str;
+	char	zero[1001];
+	char	sp[1001];
 	int		count;
 	int		return_status;
 	size_t	index;
@@ -82,7 +84,7 @@ void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s);
 int		fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s);
 size_t	length_number(const char c, va_list *ar, int base);
 int		append_identation(t_printf *data, size_t size_parameter, t_when when);
-int		append_zeros(size_t max, t_printf *data);
+int		append_sp_zero(size_t max, t_printf *data, char *tmp);
 int		special_case(t_printf *data);
 
 #endif
