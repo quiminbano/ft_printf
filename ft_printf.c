@@ -6,19 +6,34 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:40:09 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/05 00:32:28 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	end_and_free(va_list *ar, t_printf *data, int value)
+static int	append_or_return(va_list *ar, t_printf *data, int value, int flag)
 {
-	if (data->str)
-		free(data->str);
-	data->str = NULL;
-	va_end(*ar);
-	return (value);
+	size_t	buf_idx;
+
+	buf_idx = data->buffer_idx;
+	if (flag == 0)
+	{
+		if (data->str)
+			free(data->str);
+		data->str = NULL;
+		va_end(*ar);
+		return (value);
+	}
+	if (buf_idx)
+	{
+		data->mct = (size_t)data->count - data->buffer_idx;
+		data->str = copy_to_heap(data->str, data->buffer, data->mct, buf_idx);
+		if (!data->str)
+			return (-1);
+		ft_bzero(data->buffer, sizeof(data->buffer));
+	}
+	return (0);
 }
 
 static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
@@ -59,12 +74,14 @@ int	ft_dprintf(int fd, const char *s, ...)
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], &data);
 		if (data.return_status == -1 || data.count < 0)
-			return (end_and_free(&ar, &data, -1));
+			return (append_or_return(&ar, &data, -1, 0));
 		(data.index)++;
 	}
+	if (append_or_return(&ar, &data, -1, 1) == -1)
+		return (append_or_return(&ar, &data, -1, 0));
 	if (data.str && write(fd, data.str, ft_strlen(data.str)) == -1)
-		return (end_and_free(&ar, &data, -1));
-	return (end_and_free(&ar, &data, data.count));
+		return (append_or_return(&ar, &data, -1, 0));
+	return (append_or_return(&ar, &data, data.count, 0));
 }
 
 int	ft_printf(const char *s, ...)
@@ -84,10 +101,12 @@ int	ft_printf(const char *s, ...)
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], &data);
 		if (data.return_status == -1 || data.count < 0)
-			return (end_and_free(&ar, &data, -1));
+			return (append_or_return(&ar, &data, -1, 0));
 		(data.index)++;
 	}
+	if (append_or_return(&ar, &data, -1, 1) == -1)
+		return (append_or_return(&ar, &data, -1, 0));
 	if (data.str && write(1, data.str, ft_strlen(data.str)) == -1)
-		return (end_and_free(&ar, &data, -1));
-	return (end_and_free(&ar, &data, data.count));
+		return (append_or_return(&ar, &data, -1, 0));
+	return (append_or_return(&ar, &data, data.count, 0));
 }

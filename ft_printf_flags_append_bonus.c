@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/27 23:42:23 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:37:54 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/04 23:33:22 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ static int	append_special(t_printf *data, t_when when)
 		data->flags.type_sharp == LOWER)
 		ft_strlcpy(buff, "0x", 3);
 	length = ft_strlen(buff);
-	data->str = append_str(data->str, buff, data->count, length);
-	if (!data->str)
+	if (append_str(data, buff, length) == -1)
 		return (-1);
 	data->count += length;
 	return (0);
@@ -69,8 +68,7 @@ static int	sp_zero(t_printf *data, size_t total_size, t_when when, char c)
 	iter = 0;
 	while (when == BEFORE && data->flags.has_pure_number && iter < total_size)
 	{
-		data->str = append_char(data->str, c, data->count);
-		if (!data->str)
+		if (append_char(data, c) == -1)
 			return (-1);
 		iter++;
 		(data->count)++;
@@ -80,8 +78,7 @@ static int	sp_zero(t_printf *data, size_t total_size, t_when when, char c)
 	iter = 0;
 	while (when == AFTER && data->flags.has_minus && iter < total_size)
 	{
-		data->str = append_char(data->str, c, data->count);
-		if (!data->str)
+		if (append_char(data, c) == -1)
 			return (-1);
 		iter++;
 		(data->count)++;

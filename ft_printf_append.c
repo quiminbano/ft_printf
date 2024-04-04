@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:41:04 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/05 00:27:33 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,35 +16,29 @@ int	append_number(unsigned long number, t_base base, t_printf *data)
 {
 	int				write_status;
 	unsigned long	base_num;
-	const char		*lower_base = "0123456789abcdef";
-	const char		*upper_base = "0123456789ABCDEF";
+	size_t			length;
+	char			*str;
 
 	if (base == NORMAL)
 		base_num = 10;
 	else
 		base_num = 16;
-	if (number >= base_num)
-	{
-		write_status = append_number((number / base_num), base, data);
-		if (write_status == -1)
-			return (-1);
-		write_status = append_number((number % base_num), base, data);
-		if (write_status == -1)
-			return (-1);
-	}
-	else if (base == UPPER)
-		write_status = char_return(upper_base[number], data);
-	else
-		write_status = char_return(lower_base[number], data);
+	str = ft_ultoa_base(number, base_num, (size_t)base);
+	if (!str)
+		return (-1);
+	length = ft_strlen(str);
+	write_status = append_str(data, str, length);
+	free(str);
+	str = NULL;
 	if (write_status == -1)
 		return (-1);
+	data->count += length;
 	return (0);
 }
 
 int	append_pointer(unsigned long number, t_base base, t_printf *data)
 {
-	data->str = append_str(data->str, "0x", data->count, 2);
-	if (!data->str)
+	if (append_str(data, "0x", 2) == -1)
 		return (-1);
 	data->count += 2;
 	return (append_number(number, base, data));
@@ -66,8 +60,7 @@ int	nbr_return(long long number, t_base base, t_printf *data)
 
 int	char_return(char c, t_printf *data)
 {
-	data->str = append_char(data->str, c, data->count);
-	if (!data->str)
+	if (append_char(data, c) == -1)
 		return (-1);
 	data->count += 1;
 	return (0);
@@ -75,17 +68,21 @@ int	char_return(char c, t_printf *data)
 
 int	str_return(char *str, t_printf *data)
 {
+	int		write_status;
+	size_t	length;
+
 	if (str == NULL)
 	{
-		data->str = append_str(data->str, "(null)", data->count, 6);
-		data->count += 6;
+		length = 6;
+		write_status = append_str(data, "(null)", length);
 	}
 	else
 	{
-		data->str = append_str(data->str, str, data->count, ft_strlen(str));
-		data->count += (int)ft_strlen(str);
+		length = ft_strlen(str);
+		write_status = append_str(data, str, length);
 	}
-	if (!data->str)
+	data->count += (int)length;
+	if (write_status == -1)
 		return (-1);
 	return (0);
 }

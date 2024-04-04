@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:42:13 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/02 19:28:47 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/04 23:49:40 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,39 @@ static char	*handle_return(char **s1, char *returned)
 	return (returned);
 }
 
-char	*append_char(char *s1, const char c, int count)
+int	append_str(t_printf *data, char const *str, size_t n)
 {
-	int		i;
-	char	*res;
+	size_t	idx;
 
-	i = 0;
-	res = NULL;
-	if (count < 0)
-		return (handle_return(&s1, NULL));
-	res = (char *)malloc(sizeof(char) * (count + 2));
-	if (!res)
-		return (handle_return(&s1, NULL));
-	while (i < count)
+	idx = 0;
+	while (idx < n)
 	{
-		res[i] = s1[i];
-		i++;
+		if (append_char(data, str[idx]) == -1)
+			return (-1);
+		idx++;
 	}
-	res[i] = c;
-	i++;
-	res[i] = '\0';
-	return (handle_return(&s1, res));
+	return (0);
 }
 
-char	*append_str(char *s1, const char *s2, int count, size_t n)
+int	append_char(t_printf *data, char c)
+{
+	if (data->count < 0)
+		return (-1);
+	if (data->buffer_idx == STRBUFFER)
+	{
+		data->mct = (size_t)data->count - data->buffer_idx;
+		data->str = copy_to_heap(data->str, data->buffer, data->mct, STRBUFFER);
+		if (!data->str)
+			return (-1);
+		ft_bzero(data->buffer, sizeof(data->buffer));
+		data->buffer_idx = 0;
+	}
+	data->buffer[data->buffer_idx] = c;
+	(data->buffer_idx)++;
+	return (0);
+}
+
+char	*copy_to_heap(char *s1, const char *s2, int count, size_t n)
 {
 	size_t	len2;
 	size_t	i;
@@ -71,21 +80,6 @@ char	*append_str(char *s1, const char *s2, int count, size_t n)
 	return (handle_return(&s1, res));
 }
 
-static size_t	calculate_length(int base, size_t number)
-{
-	size_t	result;
-
-	result = 1;
-	if (number == 0)
-		return (result);
-	while ((number / base) > 0)
-	{
-		number /= base;
-		result++;
-	}
-	return (result);
-}
-
 size_t	length_number(const char c, va_list *ar, int base)
 {
 	va_list	copy;
@@ -108,5 +102,5 @@ size_t	length_number(const char c, va_list *ar, int base)
 	else
 		number = va_arg(copy, unsigned long);
 	va_end(copy);
-	return (calculate_length(base, number));
+	return (ft_numlength_base(number, (size_t)base));
 }

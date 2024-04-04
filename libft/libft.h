@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 08:50:51 by corellan          #+#    #+#             */
-/*   Updated: 2024/01/14 13:44:54 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/04 23:43:09 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,7 @@ void	ft_free_split(char **split);
 size_t	ft_split_length(char **arr);
 void	ft_free_int_ar(int	**array, int ammount);
 int		ft_strcmp(char const *str1, char const *str2);
+char	*ft_ultoa_base(size_t n, size_t base, size_t format);
+size_t	ft_numlength_base(size_t number, size_t base);
 
 #endif
