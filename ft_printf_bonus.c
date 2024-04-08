@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/05 00:31:53 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:16:05 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	ft_dprintf(int fd, const char *s, ...)
 	}
 	if (append_or_return(&ar, &data, -1, 1) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
-	if (data.str && write(fd, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(fd, data.str, data.count) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
 	return (append_or_return(&ar, &data, data.count, 0));
 }
@@ -138,7 +138,7 @@ int	ft_printf(const char *s, ...)
 	}
 	if (append_or_return(&ar, &data, -1, 1) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
-	if (data.str && write(1, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(1, data.str, data.count) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
 	return (append_or_return(&ar, &data, data.count, 0));
 }

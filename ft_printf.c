@@ -6,11 +6,12 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/05 00:32:28 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:27:40 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+#include <stdio.h>
 
 static int	append_or_return(va_list *ar, t_printf *data, int value, int flag)
 {
@@ -79,7 +80,7 @@ int	ft_dprintf(int fd, const char *s, ...)
 	}
 	if (append_or_return(&ar, &data, -1, 1) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
-	if (data.str && write(fd, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(fd, data.str, data.count) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
 	return (append_or_return(&ar, &data, data.count, 0));
 }
@@ -106,7 +107,7 @@ int	ft_printf(const char *s, ...)
 	}
 	if (append_or_return(&ar, &data, -1, 1) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
-	if (data.str && write(1, data.str, ft_strlen(data.str)) == -1)
+	if (data.str && write(1, data.str, data.count) == -1)
 		return (append_or_return(&ar, &data, -1, 0));
 	return (append_or_return(&ar, &data, data.count, 0));
 }

@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 13:10:34 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/05 00:09:13 by corellan         ###   ########.fr       */
+/*   Updated: 2024/04/08 12:36:50 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ char	*copy_to_heap(char *s1, const char *s2, int count, size_t n)
 	i = 0;
 	len2 = n;
 	res = NULL;
-	if (n > ft_strlen(s2))
-		len2 = ft_strlen(s2);
 	if (count < 0)
 		return (handle_return(&s1, NULL));
 	res = (char *)malloc(sizeof(char) * ((size_t)count + len2 + 1));
