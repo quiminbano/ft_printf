@@ -6,36 +6,12 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:45:22 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/08 12:27:40 by corellan         ###   ########.fr       */
+/*   Updated: 2024/06/16 01:41:26 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include <stdio.h>
-
-static int	append_or_return(va_list *ar, t_printf *data, int value, int flag)
-{
-	size_t	buf_idx;
-
-	buf_idx = data->buffer_idx;
-	if (flag == 0)
-	{
-		if (data->str)
-			free(data->str);
-		data->str = NULL;
-		va_end(*ar);
-		return (value);
-	}
-	if (buf_idx)
-	{
-		data->mct = (size_t)data->count - data->buffer_idx;
-		data->str = copy_to_heap(data->str, data->buffer, data->mct, buf_idx);
-		if (!data->str)
-			return (-1);
-		ft_bzero(data->buffer, sizeof(data->buffer));
-	}
-	return (0);
-}
 
 static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
 {
@@ -58,12 +34,14 @@ static int	handle_variadic(const char *s, va_list *ar, t_printf *data)
 	return (0);
 }
 
-int	ft_dprintf(int fd, const char *s, ...)
+int	ft_sprintf(char *str, const char *s, ...)
 {
 	va_list		ar;
 	t_printf	data;
 
 	ft_bzero(&data, sizeof(data));
+	data.str_sprintf = str;
+	data.type = SPRINTF;
 	va_start(ar, s);
 	while (s[data.index])
 	{
@@ -75,14 +53,35 @@ int	ft_dprintf(int fd, const char *s, ...)
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], &data);
 		if (data.return_status == -1 || data.count < 0)
-			return (append_or_return(&ar, &data, -1, 0));
+			return (return_interface(&ar, &data));
 		(data.index)++;
 	}
-	if (append_or_return(&ar, &data, -1, 1) == -1)
-		return (append_or_return(&ar, &data, -1, 0));
-	if (data.str && write(fd, data.str, data.count) == -1)
-		return (append_or_return(&ar, &data, -1, 0));
-	return (append_or_return(&ar, &data, data.count, 0));
+	return (return_interface(&ar, &data));
+}
+
+int	ft_dprintf(int fd, const char *s, ...)
+{
+	va_list		ar;
+	t_printf	data;
+
+	ft_bzero(&data, sizeof(data));
+	data.fd = fd;
+	data.type = PRINTF;
+	va_start(ar, s);
+	while (s[data.index])
+	{
+		if (s[data.index] == '%' && s[data.index + 1] != '\0')
+		{
+			(data.index)++;
+			data.return_status = handle_variadic(s, &ar, &data);
+		}
+		else if (s[data.index] != '%' && s[data.index] != '\0')
+			data.return_status = char_return(s[data.index], &data);
+		if (data.return_status == -1 || data.count < 0)
+			return (return_interface(&ar, &data));
+		(data.index)++;
+	}
+	return (return_interface(&ar, &data));
 }
 
 int	ft_printf(const char *s, ...)
@@ -91,6 +90,8 @@ int	ft_printf(const char *s, ...)
 	t_printf	data;
 
 	ft_bzero(&data, sizeof(data));
+	data.fd = 1;
+	data.type = PRINTF;
 	va_start(ar, s);
 	while (s[data.index])
 	{
@@ -102,12 +103,8 @@ int	ft_printf(const char *s, ...)
 		else if (s[data.index] != '%' && s[data.index] != '\0')
 			data.return_status = char_return(s[data.index], &data);
 		if (data.return_status == -1 || data.count < 0)
-			return (append_or_return(&ar, &data, -1, 0));
+			return (return_interface(&ar, &data));
 		(data.index)++;
 	}
-	if (append_or_return(&ar, &data, -1, 1) == -1)
-		return (append_or_return(&ar, &data, -1, 0));
-	if (data.str && write(1, data.str, data.count) == -1)
-		return (append_or_return(&ar, &data, -1, 0));
-	return (append_or_return(&ar, &data, data.count, 0));
+	return (return_interface(&ar, &data));
 }

@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/05 00:27:45 by corellan         ###   ########.fr       */
+/*   Updated: 2024/06/16 01:04:25 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,14 @@ int	append_number(unsigned long number, t_base base, t_printf *data)
 	int				write_status;
 	unsigned long	base_num;
 	size_t			length;
-	char			*str;
 
 	if (base == NORMAL)
 		base_num = 10;
 	else
 		base_num = 16;
-	str = ft_ultoa_base(number, base_num, (size_t)base);
-	if (!str)
-		return (-1);
-	length = ft_strlen(str);
-	write_status = append_str(data, str, length);
-	free(str);
-	str = NULL;
+	ft_sultoa_base(data->ul_buf, number, base_num, (size_t)base);
+	length = ft_strlen(data->ul_buf);
+	write_status = append_str(data, data->ul_buf, length);
 	if (write_status == -1)
 		return (-1);
 	data->count += length;

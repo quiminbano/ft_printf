@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/04/04 23:24:12 by corellan         ###   ########.fr       */
+/*   Updated: 2024/06/16 01:45:33 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,12 @@
 
 # include <stdarg.h>
 # include "libft/libft.h"
+
+typedef enum e_typeprintf
+{
+	PRINTF,
+	SPRINTF
+}	t_typeprintf;
 
 typedef enum e_base
 {
@@ -59,15 +65,20 @@ typedef struct s_flags
 
 typedef struct s_printf
 {
-	char	*str;
-	char	buffer[STRBUFFER + 1];
-	int		count;
-	int		return_status;
-	size_t	buffer_idx;
-	size_t	mct;
-	size_t	index;
-	size_t	size_number;
-	t_flags	flags;
+	char			*str;
+	char			buffer[STRBUFFER + 1];
+	char			ul_buf[21];
+	char			*str_sprintf;
+	int				count;
+	int				return_status;
+	int				fd;
+	size_t			buffer_idx;
+	size_t			index;
+	size_t			size_number;
+	size_t			count_buf;
+	size_t			pos_str;
+	t_flags			flags;
+	t_typeprintf	type;
 }	t_printf;
 
 int		ft_printf(const char *s, ...);
@@ -79,7 +90,7 @@ int		append_unsigned(unsigned long number, t_base base, t_printf *data);
 int		append_number(unsigned long number, t_base base, t_printf *data);
 int		append_char(t_printf *data, char c);
 int		append_str(t_printf *data, char const *str, size_t n);
-char	*copy_to_heap(char *s1, const char *s2, int count, size_t n);
+int		return_interface(va_list *ar, t_printf *data);
 int		check_undef(const char *s, size_t *af, t_printf *data, va_list *ar);
 void	fill_format(t_flags *fl, size_t begin, size_t end, const char *s);
 int		fill_ident(t_flags *fl, size_t *begin, size_t end, const char *s);
