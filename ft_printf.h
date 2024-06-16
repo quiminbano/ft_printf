@@ -6,13 +6,21 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:46:08 by corellan          #+#    #+#             */
-/*   Updated: 2024/06/16 01:36:26 by corellan         ###   ########.fr       */
+/*   Updated: 2024/06/16 10:33:51 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
-# define STRBUFFER 4096
+
+# ifndef STRBUFFER
+#  define STRBUFFER 2
+# endif
+
+# if STRBUFFER <= 0
+#  undef STRBUFFER
+#  define STRBUFFER 4096
+# endif
 
 # include <stdarg.h>
 # include "libft/libft.h"
@@ -52,7 +60,7 @@ int		char_return(char c, t_printf *data);
 int		nbr_return(long long number, t_base base, t_printf *data);
 int		append_pointer(unsigned long number, t_base base, t_printf *data);
 int		append_number(unsigned long number, t_base base, t_printf *data);
-int		append_char(t_printf *data, char c);
+int		append_char(t_printf *data, char c, size_t idx);
 int		append_str(t_printf *data, char const *str, size_t n);
 int		return_interface(va_list *ar, t_printf *data);
 

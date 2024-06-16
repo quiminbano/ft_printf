@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/14 13:30:19 by corellan          #+#    #+#             */
-/*   Updated: 2024/06/16 00:58:39 by corellan         ###   ########.fr       */
+/*   Updated: 2024/06/16 10:16:48 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	nbr_return(long long number, t_base base, t_printf *data)
 
 int	char_return(char c, t_printf *data)
 {
-	if (append_char(data, c) == -1)
+	if (append_char(data, c, 0) == -1)
 		return (-1);
 	data->count += 1;
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: corellan <corellan@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/19 15:42:13 by corellan          #+#    #+#             */
-/*   Updated: 2024/06/16 01:49:34 by corellan         ###   ########.fr       */
+/*   Updated: 2024/06/16 10:20:20 by corellan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ int	append_str(t_printf *data, char const *str, size_t n)
 	idx = 0;
 	while (idx < n)
 	{
-		if (append_char(data, str[idx]) == -1)
+		if (append_char(data, str[idx], idx) == -1)
 			return (-1);
 		idx++;
 	}
 	return (0);
 }
 
-int	append_char(t_printf *data, char c)
+int	append_char(t_printf *data, char c, size_t idx)
 {
 	if (data->count < 0)
 		return (-1);
@@ -39,7 +39,7 @@ int	append_char(t_printf *data, char c)
 	}
 	else if (data->buffer_idx == STRBUFFER && data->type == SPRINTF)
 	{
-		data->pos_str = (size_t)data->count - data->buffer_idx;
+		data->pos_str = ((size_t)data->count + idx) - data->buffer_idx;
 		ft_memcpy((data->str_sprintf + data->pos_str), data->buffer, STRBUFFER);
 		ft_bzero(data->buffer, sizeof(data->buffer));
 		data->buffer_idx = 0;
